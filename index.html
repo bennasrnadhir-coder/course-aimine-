@@ -2,120 +2,168 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Nadhir Elite – Programme 12 Semaines (Définitif)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+  <title>Nadhir Elite – Programme 12 Semaines (Mobile)</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
-      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
       background: #f9fafc;
       color: #1a1a2e;
-      padding: 2rem 1rem;
-      max-width: 1100px;
+      padding: 1rem 0.8rem;
+      max-width: 600px;
       margin: auto;
       line-height: 1.5;
+      -webkit-text-size-adjust: 100%;
     }
     header {
       text-align: center;
-      margin-bottom: 2rem;
+      margin-bottom: 1.2rem;
     }
     header h1 {
-      font-size: 2.5rem;
+      font-size: 1.8rem;
       font-weight: 800;
       background: linear-gradient(135deg, #0b5e2e, #c99c00);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
+      line-height: 1.2;
     }
-    header p { font-size: 1.1rem; color: #4a4a6a; margin-top: 0.3rem; }
+    header p {
+      font-size: 0.9rem;
+      color: #4a4a6a;
+      margin-top: 0.2rem;
+      padding: 0 0.2rem;
+    }
     .card {
       background: white;
-      border-radius: 16px;
-      padding: 1.5rem;
-      margin-bottom: 1.5rem;
-      box-shadow: 0 6px 20px rgba(0,0,0,0.05);
+      border-radius: 14px;
+      padding: 1rem 0.9rem;
+      margin-bottom: 1rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.04);
     }
     h2 {
-      font-size: 1.5rem;
-      margin-bottom: 0.75rem;
+      font-size: 1.25rem;
+      margin-bottom: 0.6rem;
       color: #0b5e2e;
-      border-left: 5px solid #c99c00;
-      padding-left: 0.75rem;
+      border-left: 4px solid #c99c00;
+      padding-left: 0.6rem;
+      line-height: 1.3;
     }
     h3 {
-      font-size: 1.2rem;
-      margin: 1.2rem 0 0.5rem;
+      font-size: 1.05rem;
+      margin: 1rem 0 0.4rem;
       color: #2e2e4a;
+      line-height: 1.3;
     }
     table {
       width: 100%;
       border-collapse: collapse;
-      margin-top: 0.75rem;
+      margin-top: 0.5rem;
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      white-space: nowrap;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 0.45rem 0.5rem;
+      vertical-align: top;
+      font-size: 0.8rem;
+      white-space: normal;
     }
     th {
       background: #0b5e2e;
       color: white;
-      padding: 0.5rem;
-      text-align: left;
       font-weight: 600;
-    }
-    td, th {
-      border: 1px solid #ddd;
-      padding: 0.5rem;
-      vertical-align: top;
-      font-size: 0.9rem;
+      text-align: left;
+      font-size: 0.75rem;
     }
     .tag {
       display: inline-block;
-      padding: 0.2rem 0.6rem;
-      border-radius: 20px;
-      font-size: 0.75rem;
+      padding: 0.15rem 0.5rem;
+      border-radius: 16px;
+      font-size: 0.7rem;
       font-weight: 600;
-      margin-right: 0.3rem;
+      margin-right: 0.2rem;
+      margin-bottom: 0.2rem;
     }
     .tag-green { background: #d4edda; color: #0b5e2e; }
     .tag-amber { background: #fff3cd; color: #856404; }
     .tag-red { background: #f8d7da; color: #721c24; }
     .tag-blue { background: #d6eaf8; color: #1a5276; }
-    ul, ol { margin-left: 1.5rem; }
-    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.8rem; }
-    @media (max-width: 700px) {
-      .grid-2, .grid-3 { grid-template-columns: 1fr; }
-      header h1 { font-size: 2rem; }
+    ul, ol { margin-left: 1.3rem; font-size: 0.85rem; }
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1rem;
     }
-    .number { font-family: 'Courier New', monospace; font-weight: bold; color: #c99c00; }
+    .grid-3 {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+    }
+    @media (min-width: 500px) {
+      .grid-2 { grid-template-columns: 1fr 1fr; }
+      .grid-3 { flex-direction: row; }
+      .grid-3 > * { flex: 1; }
+    }
+    .number {
+      font-family: 'Courier New', monospace;
+      font-weight: bold;
+      color: #c99c00;
+    }
     .note {
       background: #fef7e0;
-      padding: 0.8rem;
+      padding: 0.7rem;
       border-radius: 10px;
-      margin: 1rem 0;
-      font-size: 0.9rem;
+      margin: 0.8rem 0;
+      font-size: 0.8rem;
+      line-height: 1.5;
     }
     .warning {
       background: #fdecea;
-      padding: 0.8rem;
+      padding: 0.7rem;
       border-radius: 10px;
-      margin: 1rem 0;
-      border-left: 4px solid #d32f2f;
+      margin: 0.8rem 0;
+      border-left: 3px solid #d32f2f;
+      font-size: 0.8rem;
     }
-    hr { margin: 1.5rem 0; border: 0.5px solid #e0e0e0; }
-    .footer { text-align: center; font-size: 0.85rem; color: #888; margin-top: 2rem; }
+    hr { margin: 1rem 0; border: 0.5px solid #e0e0e0; }
+    .footer {
+      text-align: center;
+      font-size: 0.7rem;
+      color: #888;
+      margin-top: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
     .block-title {
       background: #0b5e2e;
       color: white;
-      padding: 0.3rem 0.8rem;
-      border-radius: 8px;
-      font-size: 0.9rem;
+      padding: 0.2rem 0.6rem;
+      border-radius: 6px;
+      font-size: 0.8rem;
       display: inline-block;
-      margin: 0.5rem 0;
+      margin: 0.3rem 0;
+    }
+    .scroll-hint {
+      font-size: 0.65rem;
+      color: #888;
+      text-align: right;
+      margin-top: -0.3rem;
+      margin-bottom: 0.4rem;
+      font-style: italic;
+    }
+    /* Rendre les tableaux jolis sur petit écran */
+    table:not(.no-scroll) {
+      min-width: 100%;
     }
   </style>
 </head>
 <body>
 <header>
-  <h1>NADHIR – Programme Définitif 12 semaines</h1>
-  <p>Compétition 30 juillet 2026 &middot; Fusion Nadhir Elite + SUB 11 UP 50 &middot; Objectifs : 100m, 120cm, BD</p>
+  <h1>NADHIR – Programme Définitif</h1>
+  <p>Compétition 30 juillet 2026<br>Objectifs : 100m · 120cm · Bras de fer</p>
 </header>
 
 <!-- PROFIL -->
@@ -128,16 +176,16 @@
       <strong>Poids :</strong> 67 kg (12‑13% BF) – cible ~64 kg<br>
       <strong>Taille :</strong> 172 cm<br>
       <strong>Fibres :</strong> mixte<br>
-      <strong>Blessures :</strong> LCL gauche réhabilité (95‑100%)
+      <strong>Blessures :</strong> LCL gauche réhabilité
     </div>
     <div>
       <strong>Performances :</strong>
       <ul>
         <li>100m : 12.6s (départ 4 points)</li>
-        <li>60m : 7.95s &middot; 30m : 4.57s</li>
+        <li>60m : 7.95s / 30m : 4.57s</li>
         <li>Détente 2 pieds élan : 72 cm</li>
-        <li>Squat 110 kg &middot; Deadlift 110 kg</li>
-        <li>Traction lestée +35 kg (max 26 rép. pdc)</li>
+        <li>Squat 110 kg / Deadlift 110 kg</li>
+        <li>Traction lestée +35 kg</li>
         <li>Nordic curl : 0 rép. parfaite</li>
         <li>Curl marteau strict : 22 kg</li>
       </ul>
@@ -148,6 +196,7 @@
 <!-- OBJECTIFS -->
 <div class="card">
   <h2>🎯 Objectifs & Jalons</h2>
+  <div class="scroll-hint">← défiler le tableau →</div>
   <table>
     <tr><th>Année</th><th>Âge</th><th>100m</th><th>Détente</th><th>Bras de fer</th><th>Événement</th></tr>
     <tr><td>2026</td><td>23</td><td><span class="tag tag-amber">12.0‑12.2</span></td><td>85‑90 cm</td><td>Développement top‑roll</td><td>Compétition 30/07</td></tr>
@@ -161,7 +210,8 @@
 
 <!-- PLANIFICATION BLOCS -->
 <div class="card">
-  <h2>📅 Macrocycle Pré‑Compétition (5 mai – 26 juillet 2026)</h2>
+  <h2>📅 Macrocycle Pré‑Compétition</h2>
+  <p style="font-size:0.8rem;">5 mai – 26 juillet 2026</p>
   <div class="grid-3">
     <div>
       <span class="block-title">Bloc 1</span><br>
@@ -179,144 +229,148 @@
       <span class="block-title" style="background:#b71c1c;">Bloc 3</span><br>
       <strong>Affûtage</strong><br>
       Semaines 9‑12 (29 juin – 26 juillet)<br>
-      <small>Volume réduit, vitesse pure, départs.</small>
+      <small>Volume réduit, vitesse pure.</small>
     </div>
   </div>
-  <p style="margin-top:1rem;">
-    <strong>Décharge :</strong> chaque 4ᵉ semaine (sem. 4, 8, 12) applique ces allégements :<br>
-    • Sprint : -30% volume (moins de répétitions)<br>
-    • Pliométrie : -40% (moins de séries, hauteur réduite si besoin)<br>
-    • Force : charges maintenues, mais RPE plus bas (-1 point)
+  <p style="margin-top:0.8rem;font-size:0.8rem;">
+    <strong>Décharge (sem. 4, 8, 12) :</strong><br>
+    • Sprint : -30% volume<br>
+    • Pliométrie : -40%<br>
+    • Force : charges maintenues, RPE -1
   </p>
 </div>
 
 <!-- SEMAINE TYPE COMPLÈTE -->
 <div class="card">
-  <h2>📆 Structure Hebdomadaire – Détails Exhaustifs</h2>
+  <h2>📆 Structure Hebdomadaire</h2>
 
   <!-- LUNDI -->
   <h3>🏁 Lundi – Sprint Technique</h3>
+  <div class="scroll-hint">← défiler le tableau →</div>
   <table>
     <tr><th>Exercice</th><th>Bloc 1</th><th>Bloc 2</th><th>Bloc 3</th></tr>
-    <tr><td>Échauffement</td><td colspan="3">Footing 10' + gammes (talons-fesses, genoux hauts, skips) 10' + <strong>Wall drill</strong> (statique 2×30s/jambe, dynamique 2×10 pas)</td></tr>
-    <tr><td>Départs 4 points</td><td>4×10m résisté (élastique), repos 2'</td><td>3×20m résisté + 2×10m libre, repos 2'</td><td>4×10m libre avec signal sonore (réaction), repos 2'</td></tr>
+    <tr><td>Échauffement</td><td colspan="3">Footing 10' + gammes 10' + <strong>Wall drill</strong> (statique 2×30s/jambe, dynamique 2×10 pas)</td></tr>
+    <tr><td>Départs 4 points</td><td>4×10m résisté (élastique), repos 2'</td><td>3×20m résisté + 2×10m libre, repos 2'</td><td>4×10m libre avec signal sonore, repos 2'</td></tr>
     <tr><td>Sprint technique</td><td>3×30m à 95%, repos 4'</td><td>3×60m à 98‑100%, repos 7‑8'</td><td>2×80m à 100% (chrono), repos 10'</td></tr>
     <tr><td>Volume sprint</td><td>~210m</td><td>~250m</td><td>~180m</td></tr>
     <tr><td>Pliométrie basse</td><td colspan="2">Pogo jumps 3×20 contacts (1') + Sauts pieds joints 3×6 à 70‑75%</td><td>Pogo 2×20 contacts, sauts joints 2×6</td></tr>
     <tr><td>Retour au calme</td><td colspan="3">10' étirements + gainage planche 3×30s</td></tr>
   </table>
-  <div class="note">🎥 Filme chaque départ (profil) – angle ~45°, poussée horizontale. En bloc 3, concentre-toi sur le temps de réaction au signal.</div>
+  <div class="note">🎥 Filme chaque départ (profil) – angle ~45°, poussée horizontale.</div>
 
   <!-- MARDI -->
   <h3>🏋️ Mardi – Force Bas + Isométrie mollets</h3>
+  <div class="scroll-hint">← défiler le tableau →</div>
   <table>
     <tr><th>Exercice</th><th>Bloc 1</th><th>Bloc 2</th><th>Bloc 3</th></tr>
-    <tr><td>Squat profond (ischios aux mollets)</td><td>4×5 <span class="number">82‑88kg</span> (75‑80%)</td><td>4×4 <span class="number">90‑95kg</span> (82‑87%)</td><td>3×3 <span class="number">93‑99kg</span> (85‑90%)</td></tr>
-    <tr><td>Hip Thrust (explosif en concentrique)</td><td>4×6 <span class="number">88kg</span> (80%)</td><td>4×4 <span class="number">93kg</span> (85%)</td><td>3×3 <span class="number">97kg</span> (88%)</td></tr>
+    <tr><td>Squat profond</td><td>4×5 <span class="number">82‑88kg</span> (75‑80%)</td><td>4×4 <span class="number">90‑95kg</span> (82‑87%)</td><td>3×3 <span class="number">93‑99kg</span> (85‑90%)</td></tr>
+    <tr><td>Hip Thrust (explosif)</td><td>4×6 <span class="number">88kg</span> (80%)</td><td>4×4 <span class="number">93kg</span> (85%)</td><td>3×3 <span class="number">97kg</span> (88%)</td></tr>
     <tr><td>Trap Bar Deadlift</td><td>3×5 <span class="number">93kg</span> (85%)</td><td>3×3 <span class="number">99kg</span> (90%)</td><td>2×3 <span class="number">99kg</span> (maintien)</td></tr>
     <tr><td>Nordic Curl (excentrique)</td><td>4×3 (descente 5s)</td><td>4×4 (descente 3s)</td><td>3×3 (descente 2s)</td></tr>
-    <tr><td>Fentes bulgares</td><td>3×6/jambe <span class="number">20‑25kg</span></td><td>3×5/jambe <span class="number">25‑30kg</span></td><td>2×5/jambe <span class="number">30kg</span> (jambe faible en 1<sup>er</sup>)</td></tr>
-    <tr><td>Isométrie mollets ★</td><td colspan="3"><strong>Genou tendu</strong> 2×30‑45s + <strong>genou fléchi</strong> 2×30‑45s (en fin de séance, sur une marche ou step)</td></tr>
-    <tr><td>Repos entre séries</td><td>2'30 – 3'</td><td>3'</td><td>3' – 4'</td></tr>
+    <tr><td>Fentes bulgares</td><td>3×6/jambe <span class="number">20‑25kg</span></td><td>3×5/jambe <span class="number">25‑30kg</span></td><td>2×5/jambe <span class="number">30kg</span></td></tr>
+    <tr><td>Isométrie mollets ★</td><td colspan="3"><strong>Genou tendu</strong> 2×30‑45s + <strong>genou fléchi</strong> 2×30‑45s (fin de séance)</td></tr>
+    <tr><td>Repos</td><td>2'30 – 3'</td><td>3'</td><td>3' – 4'</td></tr>
   </table>
-  <div class="warning">⚠️ Priorité Nordic Curl – si descente impossible, utilise un élastique d’assistance. ★ L’isométrie mollets (issue du PDF SUB 11 UP 50) renforce la rigidité de la cheville et prévient les tendinites achilléennes.</div>
+  <div class="warning">⚠️ Priorité Nordic Curl – utiliser un élastique si descente impossible. ★ Isométrie mollets = rigidité cheville.</div>
 
   <!-- MERCREDI BD A -->
   <h3>🤼 Mercredi – Bras de Fer A (Force Max Top‑Roll)</h3>
+  <div class="scroll-hint">← défiler le tableau →</div>
   <table>
     <tr><th>Exercice</th><th>Bloc 1</th><th>Bloc 2</th><th>Bloc 3</th></tr>
     <tr><td>Back Pressure poulie haute</td><td>4×6 <span class="number">29‑30kg</span></td><td>4×5 <span class="number">32‑34kg</span></td><td>3×3 <span class="number">34‑36kg</span></td></tr>
     <tr><td>Pronation lourde poulie</td><td>4×6‑8 <span class="number">11.3kg</span></td><td>4×5‑6 <span class="number">12.5kg</span></td><td>3×4‑6 <span class="number">13‑14kg</span></td></tr>
-    <tr><td>Riser (poulie basse, montée du poignet)</td><td>3×8 <span class="number">18kg</span></td><td>3×6 <span class="number">20kg</span></td><td>2×6 <span class="number">22kg</span></td></tr>
-    <tr><td>Isométrie combinée (tirage + pronation verrouillée)</td><td>3×15s <span class="number">50kg</span></td><td>3×20s <span class="number">55kg</span></td><td>3×25s <span class="number">60kg</span></td></tr>
-    <tr><td>Grip épais (serviette sur barre)</td><td>2× hold max</td><td>2× hold max +2.5kg</td><td>2× hold max (type compétition)</td></tr>
+    <tr><td>Riser (poulie basse)</td><td>3×8 <span class="number">18kg</span></td><td>3×6 <span class="number">20kg</span></td><td>2×6 <span class="number">22kg</span></td></tr>
+    <tr><td>Isométrie combinée</td><td>3×15s <span class="number">50kg</span></td><td>3×20s <span class="number">55kg</span></td><td>3×25s <span class="number">60kg</span></td></tr>
+    <tr><td>Grip épais</td><td>2× hold max</td><td>2× hold max +2.5kg</td><td>2× hold max</td></tr>
   </table>
-  <p>Progression : +0.5‑1 kg toutes les 2 semaines si les répétitions sont validées sans échec. Isométrie : +1‑2 sec par semaine.</p>
+  <p style="font-size:0.75rem;">Progression : +0.5‑1 kg/2 sem. Isométrie : +1‑2 sec/sem.</p>
 
   <!-- JEUDI -->
-  <h3>🏁 Jeudi – Sprint Accélération + Bonds + Hops ★</h3>
+  <h3>🏁 Jeudi – Sprint Accélération + Bonds + Hops</h3>
+  <div class="scroll-hint">← défiler le tableau →</div>
   <table>
     <tr><th>Exercice</th><th>Bloc 1</th><th>Bloc 2</th><th>Bloc 3</th></tr>
-    <tr><td>Départs résistés</td><td>4×10m</td><td>3×15m</td><td>3×10m libre (signal sonore)</td></tr>
-    <tr><td>Sprint 60m</td><td>2×60m à 95%, repos 6'</td><td>2×60m à 100% (chrono), repos 8'</td><td>2×60m à 100% (départ debout), repos 8'</td></tr>
+    <tr><td>Départs résistés</td><td>4×10m</td><td>3×15m</td><td>3×10m libre (signal)</td></tr>
+    <tr><td>Sprint 60m</td><td>2×60m à 95%, repos 6'</td><td>2×60m à 100% (chrono), repos 8'</td><td>2×60m à 100%, repos 8'</td></tr>
     <tr><td>Bonds horizontaux (5 bonds)</td><td>3 séries, repos 2'</td><td>4 séries, repos 2'</td><td>3 séries (qualité)</td></tr>
-    <tr><td>Hops unipodaux bas ★</td><td colspan="3"><strong>2×15/jambe</strong> (petits bonds rapides, cheville verrouillée, rester très bas) – après les bonds</td></tr>
+    <tr><td>Hops unipodaux bas ★</td><td colspan="3"><strong>2×15/jambe</strong> (petits bonds, cheville verrouillée)</td></tr>
   </table>
-  <div class="note">★ Les hops unipodaux (PDF SUB 11 UP 50) améliorent la stabilité de la cheville et la proprioception. Ne pas les faire en fin de séance si la fatigue est trop grande.</div>
+  <div class="note">★ Hops unipodaux = stabilité cheville (PDF SUB 11 UP 50).</div>
 
   <!-- VENDREDI -->
   <h3>⚡ Vendredi – Pliométrie + Force Explosive</h3>
+  <div class="scroll-hint">← défiler le tableau →</div>
   <table>
     <tr><th>Exercice</th><th>Bloc 1</th><th>Bloc 2</th><th>Bloc 3</th></tr>
-    <tr><td>Drop Jumps</td><td>5×3 depuis <span class="number">40 cm</span></td><td>5×3 depuis <span class="number">45‑50 cm</span></td><td>4×3 depuis <span class="number">40 cm</span> (entretien)</td></tr>
+    <tr><td>Drop Jumps</td><td>5×3 depuis <span class="number">40 cm</span></td><td>5×3 depuis <span class="number">45‑50 cm</span></td><td>4×3 depuis <span class="number">40 cm</span></td></tr>
     <tr><td>Trap Bar Jumps</td><td>5×3 <span class="number">30‑35 kg</span></td><td>5×2 <span class="number">35‑40 kg</span></td><td>4×2 <span class="number">35‑40 kg</span></td></tr>
     <tr><td>Squat sauté</td><td>3×5 <span class="number">20 kg</span></td><td>4×4 <span class="number">25 kg</span></td><td>3×4 <span class="number">20 kg</span></td></tr>
     <tr><td>Pompes claquées</td><td>3×6</td><td>3×8</td><td>3×6</td></tr>
-    <tr><td>Isométrie mollets (identique mardi)</td><td colspan="3"><strong>Genou tendu</strong> 2×30‑45s + <strong>genou fléchi</strong> 2×30‑45s (fin de séance)</td></tr>
+    <tr><td>Isométrie mollets</td><td colspan="3"><strong>Genou tendu + fléchi</strong> 2×30‑45s chaque (fin)</td></tr>
   </table>
-  <div class="note">Drop jump : temps de contact < 0.2s. Si la hauteur de rebond chute de plus de 5%, réduire la hauteur de boîte immédiatement. Le test RSI mensuel (bloc 2) se fait le dimanche.</div>
+  <div class="note">Drop jump : temps de contact < 0.2s. Si perte >5%, baisse la boîte.</div>
 
   <!-- SAMEDI BD B -->
   <h3>🤼 Samedi – Bras de Fer B (Tendons & Stabilité)</h3>
+  <div class="scroll-hint">← défiler le tableau →</div>
   <table>
     <tr><th>Exercice</th><th>Bloc 1</th><th>Bloc 2</th><th>Bloc 3</th></tr>
     <tr><td>Back Pressure isométrique</td><td>3×20s <span class="number">20.3kg</span></td><td>3×25s <span class="number">22.5kg</span></td><td>3×30s <span class="number">25kg</span></td></tr>
     <tr><td>Pronation partielle lente</td><td>3×10 <span class="number">11.3kg</span></td><td>3×8 <span class="number">12.5kg</span></td><td>3×6 <span class="number">13kg</span></td></tr>
-    <tr><td>Side Pressure contrôlée</td><td>3×8 <span class="number">13.5kg</span></td><td>3×6 <span class="number">15kg</span></td><td>3×5 <span class="number">16kg</span></td></tr>
+    <tr><td>Side Pressure</td><td>3×8 <span class="number">13.5kg</span></td><td>3×6 <span class="number">15kg</span></td><td>3×5 <span class="number">16kg</span></td></tr>
     <tr><td>Curl marteau strict</td><td>3×8 <span class="number">18kg</span></td><td>3×6 <span class="number">20kg</span></td><td>3×5 <span class="number">22kg</span></td></tr>
-    <tr><td>Anti‑Idriss (hold prise)</td><td>2× max <span class="number">22.5kg</span></td><td>2× max <span class="number">25kg</span></td><td>2× max <span class="number">27.5kg</span></td></tr>
+    <tr><td>Anti‑Idriss (hold)</td><td>2× max <span class="number">22.5kg</span></td><td>2× max <span class="number">25kg</span></td><td>2× max <span class="number">27.5kg</span></td></tr>
   </table>
-  <p>Séance de protection articulaire. Ne jamais aller à l’échec total, surtout en side pressure.</p>
+  <p style="font-size:0.75rem;">Protection articulaire – jamais à l’échec.</p>
 
   <!-- DIMANCHE -->
-  <h3>🧘 Dimanche – Repos / Récupération active</h3>
+  <h3>🧘 Dimanche – Repos / Récupération</h3>
   <ul>
-    <li><strong>Bloc 1 :</strong> Marche 30' + mobilité hanches/chevilles/épaules.</li>
-    <li><strong>Bloc 2 :</strong> 1 dimanche sur 2 : test RSI (3 drop jumps 40 cm, noter temps contact + hauteur).</li>
-    <li><strong>Bloc 3 :</strong> Récupération totale, bain froid 10‑12°C 10', sommeil 9‑10h.</li>
+    <li><strong>Bloc 1 :</strong> Marche 30' + mobilité.</li>
+    <li><strong>Bloc 2 :</strong> 1 dim./2 : test RSI (3 drop jumps 40 cm).</li>
+    <li><strong>Bloc 3 :</strong> Bain froid 10' + sommeil 9‑10h.</li>
   </ul>
 </div>
 
 <!-- RÈGLES D'OR -->
 <div class="card">
-  <h2>🧠 Règles d’Auto‑Régulation (non négociables)</h2>
+  <h2>🧠 Règles d’Auto‑Régulation</h2>
   <div class="grid-2">
     <div>
       <h3>🛌 SNC obligatoire</h3>
-      <p>Chaque matin : 3 sauts verticaux + sommeil.<br>
-      Si moyenne du jour &lt; 85% de la moyenne sur 7 jours OU sommeil &lt; 7h30 → <strong>séance haute intensité annulée</strong> (remplacée par mobilité/récup).</p>
+      <p style="font-size:0.8rem;">Chaque matin : 3 sauts + sommeil. Si ratio &lt; 85% ou sommeil &lt; 7h30 → séance haute intensité remplacée par mobilité.</p>
     </div>
     <div>
       <h3>🥩 Nutrition</h3>
-      <p>Jours haute intensité : 5‑6 g/kg glucides, 2 g/kg protéines.<br>
-      Suppléments : créatine 5g/j, whey, oméga‑3, magnésium bisglycinate. Eau ≥ 2 L/j.</p>
+      <p style="font-size:0.8rem;">Jours intenses : 5‑6 g/kg glucides, 2 g/kg protéines. Créatine 5g, whey, oméga‑3. Eau ≥ 2 L.</p>
     </div>
     <div>
       <h3>⏱️ Repos strict</h3>
-      <p>Sprints Vmax : 6‑10 min de repos complet entre les répétitions. Force lourde : 3‑4 min. <strong>Jamais sprinter fatigué.</strong></p>
+      <p style="font-size:0.8rem;">Sprints Vmax : 6‑10 min de repos. Force : 3‑4 min. Jamais de sprint fatigué.</p>
     </div>
     <div>
-      <h3>🛡️ Règle des 3‑5% ★</h3>
-      <p>Si la vitesse ou la hauteur de saut chute de plus de 3‑5% sur une répétition → <strong>arrêt immédiat de l’exercice</strong>. (Issue du PDF SUB 11 UP 50)</p>
+      <h3>🛡️ Règle des 3‑5%</h3>
+      <p style="font-size:0.8rem;">Si vitesse ou hauteur de saut chute de 3‑5% → arrêt immédiat de l’exercice.</p>
     </div>
   </div>
-  <div class="note">
-    <strong>Ajustement automatique :</strong> si RPE &lt; 7 deux semaines d’affilée → augmenter la charge de 2.5%. Si RPE &gt; 9 → baisser de 5%. Le coach IA de l’application Nadhir Elite V10 gère cela.
+  <div class="note" style="font-size:0.75rem;">
+    <strong>Ajustement automatique :</strong> RPE &lt; 7 deux semaines → +2.5%. RPE &gt; 9 → -5%.
   </div>
 </div>
 
 <!-- PROJECTION TECHNIQUE -->
 <div class="card">
-  <h2>📈 Trajectoire Technique vers les Objectifs</h2>
-  <ul>
-    <li><strong>Sprint :</strong> Vmax &gt; 11.7 m/s, temps de réaction &lt; 0.15s, squat 2× poids de corps (134 kg).</li>
-    <li><strong>Détente :</strong> RSI &gt; 2.5, drop jumps maîtrisés jusqu’à 80 cm, puissance explosive maximale.</li>
-    <li><strong>Bras de fer :</strong> back pressure assez forte pour neutraliser la masse, endurance en match simulé.</li>
+  <h2>📈 Trajectoire Technique</h2>
+  <ul style="font-size:0.8rem;">
+    <li><strong>Sprint :</strong> Vmax &gt; 11.7 m/s, réaction &lt; 0.15s, squat 2× pdc (134 kg).</li>
+    <li><strong>Détente :</strong> RSI &gt; 2.5, drop jumps jusqu’à 80 cm.</li>
+    <li><strong>Bras de fer :</strong> back pressure suffisante, endurance match.</li>
   </ul>
 </div>
 
 <div class="footer">
-  Programme définitif — Fusion Nadhir Elite + SUB 11 UP 50 (bonnes pratiques) — Généré le <span id="date"></span>
+  Programme définitif – Fusion Nadhir Elite + SUB 11 UP 50 – Généré le <span id="date"></span>
 </div>
 
 <script>
