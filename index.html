@@ -1,380 +1,3431 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
-  <title>Nadhir Elite – Programme 12 Semaines (Mobile)</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OVERDRIVE MAX-V // SHADOW ASSASSIN CORE v2.0</title>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       POLICES GOOGLE FONTS
+       Cinzel     → Titres épiques / majestés
+       Orbitron   → Interface tech / chiffres
+       Teko       → Texte agressif / labels
+       Share Tech Mono → Données brutes / code
+  ════════════════════════════════════════════════════════════ -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Orbitron:wght@400;500;700;900&family=Teko:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
+
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    /* ════════════════════════════════════════════════════════════
+       VARIABLES CSS GLOBALES — PALETTE SHADOW ASSASSIN
+    ════════════════════════════════════════════════════════════ */
+    :root {
+      --void:        #0a0000;        /* Noir profond absolu */
+      --void-2:      #0f0202;        /* Légèrement réchauffé */
+      --void-3:      #140505;        /* Cartes */
+      --void-4:      #1a0808;        /* Hover */
+      --blood:       #ff1a2e;        /* Rouge sang néon — urgence */
+      --blood-dim:   #cc1020;        /* Rouge atténué */
+      --blood-glow:  rgba(255,26,46,0.35);
+      --cyber:       #00f5ff;        /* Cyan électrique — clarté */
+      --cyber-dim:   #00bfcc;
+      --cyber-glow:  rgba(0,245,255,0.3);
+      --gold:        #ffcc00;        /* Or victoire */
+      --gold-dim:    #cc9900;
+      --gold-glow:   rgba(255,204,0,0.3);
+      --white-soft:  #e8e0e0;
+      --grey-mid:    #555;
+      --grey-dim:    #333;
+
+      --font-epic:   'Cinzel', serif;
+      --font-tech:   'Orbitron', monospace;
+      --font-aggro:  'Teko', sans-serif;
+      --font-data:   'Share Tech Mono', monospace;
+
+      --border-blood: 1px solid rgba(255,26,46,0.4);
+      --border-cyber: 1px solid rgba(0,245,255,0.4);
+      --border-gold:  1px solid rgba(255,204,0,0.4);
+
+      --radius-sm: 4px;
+      --radius-md: 8px;
+      --radius-lg: 12px;
+
+      --transition: 0.25s cubic-bezier(0.4,0,0.2,1);
+    }
+
+    /* ════════════════════════════════════════════════════════════
+       RESET & BASE
+    ════════════════════════════════════════════════════════════ */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html { font-size: 16px; scroll-behavior: smooth; }
+
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-      background: #f9fafc;
-      color: #1a1a2e;
-      padding: 1rem 0.8rem;
-      max-width: 600px;
-      margin: auto;
-      line-height: 1.5;
-      -webkit-text-size-adjust: 100%;
+      background-color: var(--void);
+      color: var(--white-soft);
+      font-family: var(--font-aggro);
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+      cursor: default;
     }
-    header {
+
+    /* Scanlines subtiles sur tout le body */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0,0,0,0.07) 2px,
+        rgba(0,0,0,0.07) 4px
+      );
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    /* ════════════════════════════════════════════════════════════
+       CANVAS PARTICLES — ARRIÈRE-PLAN FLUIDE
+    ════════════════════════════════════════════════════════════ */
+    #particleCanvas {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* ════════════════════════════════════════════════════════════
+       WRAPPER PRINCIPAL
+    ════════════════════════════════════════════════════════════ */
+    #app {
+      position: relative;
+      z-index: 1;
+      max-width: 1600px;
+      margin: 0 auto;
+      padding: 0 20px 60px;
+    }
+
+    /* ════════════════════════════════════════════════════════════
+       HEADER HÉROÏQUE
+    ════════════════════════════════════════════════════════════ */
+    #main-header {
+      position: relative;
+      padding: 40px 0 30px;
       text-align: center;
-      margin-bottom: 1.2rem;
+      overflow: hidden;
     }
-    header h1 {
-      font-size: 1.8rem;
-      font-weight: 800;
-      background: linear-gradient(135deg, #0b5e2e, #c99c00);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      line-height: 1.2;
+
+    #main-header::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 50%; transform: translateX(-50%);
+      width: 600px; height: 2px;
+      background: linear-gradient(90deg, transparent, var(--blood), var(--cyber), var(--blood), transparent);
+      animation: scanH 3s linear infinite;
     }
-    header p {
-      font-size: 0.9rem;
-      color: #4a4a6a;
-      margin-top: 0.2rem;
-      padding: 0 0.2rem;
+
+    @keyframes scanH {
+      0%   { opacity: 0.4; }
+      50%  { opacity: 1; }
+      100% { opacity: 0.4; }
     }
-    .card {
-      background: white;
-      border-radius: 14px;
-      padding: 1rem 0.9rem;
-      margin-bottom: 1rem;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.04);
-    }
-    h2 {
-      font-size: 1.25rem;
-      margin-bottom: 0.6rem;
-      color: #0b5e2e;
-      border-left: 4px solid #c99c00;
-      padding-left: 0.6rem;
-      line-height: 1.3;
-    }
-    h3 {
-      font-size: 1.05rem;
-      margin: 1rem 0 0.4rem;
-      color: #2e2e4a;
-      line-height: 1.3;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 0.5rem;
-      display: block;
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-      white-space: nowrap;
-    }
-    th, td {
-      border: 1px solid #ddd;
-      padding: 0.45rem 0.5rem;
-      vertical-align: top;
-      font-size: 0.8rem;
-      white-space: normal;
-    }
-    th {
-      background: #0b5e2e;
-      color: white;
-      font-weight: 600;
-      text-align: left;
-      font-size: 0.75rem;
-    }
-    .tag {
+
+    .header-badge {
       display: inline-block;
-      padding: 0.15rem 0.5rem;
-      border-radius: 16px;
-      font-size: 0.7rem;
-      font-weight: 600;
-      margin-right: 0.2rem;
-      margin-bottom: 0.2rem;
+      font-family: var(--font-data);
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      color: var(--blood);
+      border: var(--border-blood);
+      padding: 4px 14px;
+      margin-bottom: 14px;
+      clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+      background: rgba(255,26,46,0.08);
+      animation: badgePulse 2s ease-in-out infinite;
     }
-    .tag-green { background: #d4edda; color: #0b5e2e; }
-    .tag-amber { background: #fff3cd; color: #856404; }
-    .tag-red { background: #f8d7da; color: #721c24; }
-    .tag-blue { background: #d6eaf8; color: #1a5276; }
-    ul, ol { margin-left: 1.3rem; font-size: 0.85rem; }
-    .grid-2 {
+
+    @keyframes badgePulse {
+      0%,100% { box-shadow: 0 0 6px var(--blood-glow); }
+      50%      { box-shadow: 0 0 18px var(--blood-glow); }
+    }
+
+    .header-title {
+      font-family: var(--font-epic);
+      font-size: clamp(2rem, 5vw, 3.8rem);
+      font-weight: 900;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      line-height: 1.05;
+      color: var(--white-soft);
+      text-shadow:
+        0 0 30px var(--blood-glow),
+        0 0 60px rgba(255,26,46,0.2);
+      position: relative;
+    }
+
+    .header-title span.blood  { color: var(--blood);  text-shadow: 0 0 20px var(--blood-glow),  0 0 40px var(--blood); }
+    .header-title span.cyber  { color: var(--cyber);  text-shadow: 0 0 20px var(--cyber-glow),  0 0 40px var(--cyber); }
+
+    /* Effet glitch sur le titre */
+    .header-title::before,
+    .header-title::after {
+      content: attr(data-text);
+      position: absolute;
+      inset: 0;
+      clip-path: polygon(0 30%, 100% 30%, 100% 50%, 0 50%);
+      animation: glitch 4s infinite;
+    }
+    .header-title::before {
+      color: var(--blood);
+      transform: translateX(-3px);
+      animation-delay: 0.05s;
+      opacity: 0.6;
+    }
+    .header-title::after {
+      color: var(--cyber);
+      transform: translateX(3px);
+      animation-delay: 0.1s;
+      opacity: 0.4;
+    }
+
+    @keyframes glitch {
+      0%,90%,100% { opacity: 0; transform: translateX(0); }
+      92% { opacity: 0.6; transform: translateX(-4px); clip-path: polygon(0 20%, 100% 20%, 100% 40%, 0 40%); }
+      94% { opacity: 0.4; transform: translateX(4px); clip-path: polygon(0 60%, 100% 60%, 100% 80%, 0 80%); }
+      96% { opacity: 0; }
+    }
+
+    .header-subtitle {
+      font-family: var(--font-tech);
+      font-size: clamp(0.55rem, 1.2vw, 0.75rem);
+      letter-spacing: 0.35em;
+      color: var(--cyber-dim);
+      margin-top: 10px;
+      text-transform: uppercase;
+    }
+
+    .header-athlete {
+      font-family: var(--font-aggro);
+      font-size: clamp(1rem, 2.5vw, 1.6rem);
+      letter-spacing: 0.1em;
+      color: var(--gold);
+      margin-top: 6px;
+      text-shadow: 0 0 12px var(--gold-glow);
+      text-transform: uppercase;
+    }
+
+    /* Ligne décorative sous le header */
+    .header-line {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 24px;
+      justify-content: center;
+    }
+    .header-line-seg {
+      height: 1px;
+      flex: 1;
+      max-width: 300px;
+      background: linear-gradient(90deg, transparent, var(--blood));
+    }
+    .header-line-seg.right {
+      background: linear-gradient(90deg, var(--cyber), transparent);
+    }
+    .header-line-diamond {
+      width: 8px; height: 8px;
+      background: var(--gold);
+      transform: rotate(45deg);
+      box-shadow: 0 0 10px var(--gold);
+    }
+
+    /* ════════════════════════════════════════════════════════════
+       ALERTE GLOBALE (rouge clignotant)
+    ════════════════════════════════════════════════════════════ */
+    #global-alert {
+      display: none;
+      margin: 16px 0;
+      padding: 14px 20px;
+      background: rgba(255,26,46,0.12);
+      border: 2px solid var(--blood);
+      border-radius: var(--radius-md);
+      font-family: var(--font-tech);
+      font-size: 0.8rem;
+      letter-spacing: 0.1em;
+      color: var(--blood);
+      text-align: center;
+      animation: alertBlink 0.8s ease-in-out infinite;
+      box-shadow: 0 0 24px var(--blood-glow), inset 0 0 24px rgba(255,26,46,0.05);
+    }
+    #global-alert.active { display: block; }
+
+    @keyframes alertBlink {
+      0%,100% { opacity: 1; box-shadow: 0 0 24px var(--blood-glow); }
+      50%      { opacity: 0.7; box-shadow: 0 0 8px var(--blood-glow); }
+    }
+
+    /* ════════════════════════════════════════════════════════════
+       GRID SUPÉRIEUR — COUNTDOWN + OBJECTIF + SÉCURITÉ
+    ════════════════════════════════════════════════════════════ */
+    .top-grid {
       display: grid;
-      grid-template-columns: 1fr;
-      gap: 1rem;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+      margin-top: 24px;
     }
-    .grid-3 {
+
+    /* ════════════════════════════════════════════════════════════
+       CARDS — BASE
+    ════════════════════════════════════════════════════════════ */
+    .card {
+      background: var(--void-3);
+      border: var(--border-blood);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      position: relative;
+      overflow: hidden;
+      transition: transform var(--transition), box-shadow var(--transition);
+    }
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, var(--blood), transparent);
+    }
+    .card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(255,26,46,0.15);
+    }
+    .card.cyber-card {
+      border-color: rgba(0,245,255,0.3);
+    }
+    .card.cyber-card::before {
+      background: linear-gradient(90deg, var(--cyber), transparent);
+    }
+    .card.gold-card {
+      border-color: rgba(255,204,0,0.35);
+    }
+    .card.gold-card::before {
+      background: linear-gradient(90deg, var(--gold), transparent);
+    }
+
+    .card-label {
+      font-family: var(--font-data);
+      font-size: 0.6rem;
+      letter-spacing: 0.25em;
+      color: var(--blood);
+      text-transform: uppercase;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .card-label::before {
+      content: '▸';
+      font-size: 0.7rem;
+    }
+    .card.cyber-card .card-label  { color: var(--cyber); }
+    .card.cyber-card .card-label::before { color: var(--cyber); }
+    .card.gold-card  .card-label  { color: var(--gold); }
+    .card.gold-card  .card-label::before { color: var(--gold); }
+
+    /* ════════════════════════════════════════════════════════════
+       COUNTDOWN CARD
+    ════════════════════════════════════════════════════════════ */
+    #countdown-card {
+      text-align: center;
+    }
+    .countdown-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .countdown-unit {
+      background: rgba(255,26,46,0.08);
+      border: var(--border-blood);
+      border-radius: var(--radius-md);
+      padding: 12px 6px;
+      clip-path: polygon(6px 0%, 100% 0%, calc(100% - 6px) 100%, 0% 100%);
+    }
+    .countdown-value {
+      font-family: var(--font-tech);
+      font-size: clamp(1.4rem, 3vw, 2.2rem);
+      font-weight: 900;
+      color: var(--blood);
+      text-shadow: 0 0 14px var(--blood);
+      line-height: 1;
+    }
+    .countdown-label {
+      font-family: var(--font-data);
+      font-size: 0.5rem;
+      letter-spacing: 0.15em;
+      color: var(--grey-mid);
+      margin-top: 4px;
+      text-transform: uppercase;
+    }
+    .countdown-date {
+      font-family: var(--font-tech);
+      font-size: 0.65rem;
+      color: var(--cyber-dim);
+      letter-spacing: 0.1em;
+      margin-top: 10px;
+    }
+
+    /* ════════════════════════════════════════════════════════════
+       OBJECTIF CHRONO CARD — PRÉDICTION DYNAMIQUE
+    ════════════════════════════════════════════════════════════ */
+    .chrono-display {
+      text-align: center;
+      padding: 10px 0;
+    }
+    .chrono-current {
+      font-family: var(--font-tech);
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 900;
+      color: var(--gold);
+      text-shadow: 0 0 20px var(--gold-glow), 0 0 40px rgba(255,204,0,0.2);
+      line-height: 1;
+    }
+    .chrono-arrow {
+      font-size: 1.4rem;
+      color: var(--grey-mid);
+      margin: 4px 0;
+    }
+    .chrono-target {
+      font-family: var(--font-tech);
+      font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+      font-weight: 700;
+      color: var(--cyber);
+      text-shadow: 0 0 12px var(--cyber-glow);
+    }
+    .chrono-delta {
+      font-family: var(--font-aggro);
+      font-size: 1.1rem;
+      color: var(--blood);
+      margin-top: 6px;
+      letter-spacing: 0.05em;
+    }
+    .chrono-progress-bar {
+      margin-top: 12px;
+      height: 6px;
+      background: var(--void-4);
+      border-radius: 3px;
+      overflow: hidden;
+      border: 1px solid var(--grey-dim);
+    }
+    .chrono-progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--blood), var(--gold), var(--cyber));
+      border-radius: 3px;
+      transition: width 1.5s ease;
+      position: relative;
+    }
+    .chrono-progress-fill::after {
+      content: '';
+      position: absolute;
+      right: 0; top: 0; bottom: 0;
+      width: 8px;
+      background: var(--white-soft);
+      border-radius: 4px;
+      box-shadow: 0 0 8px var(--cyber);
+    }
+
+    /* ════════════════════════════════════════════════════════════
+       SÉCURITÉ MONITORING CARD
+    ════════════════════════════════════════════════════════════ */
+    .security-inputs {
       display: flex;
       flex-direction: column;
-      gap: 0.8rem;
+      gap: 14px;
+      margin-top: 10px;
     }
-    @media (min-width: 500px) {
-      .grid-2 { grid-template-columns: 1fr 1fr; }
-      .grid-3 { flex-direction: row; }
-      .grid-3 > * { flex: 1; }
+    .security-field {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
     }
-    .number {
-      font-family: 'Courier New', monospace;
-      font-weight: bold;
-      color: #c99c00;
+    .security-field-label {
+      font-family: var(--font-data);
+      font-size: 0.6rem;
+      letter-spacing: 0.15em;
+      color: var(--cyber);
+      text-transform: uppercase;
     }
-    .note {
-      background: #fef7e0;
-      padding: 0.7rem;
-      border-radius: 10px;
-      margin: 0.8rem 0;
-      font-size: 0.8rem;
-      line-height: 1.5;
+    .security-input-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
-    .warning {
-      background: #fdecea;
-      padding: 0.7rem;
-      border-radius: 10px;
-      margin: 0.8rem 0;
-      border-left: 3px solid #d32f2f;
-      font-size: 0.8rem;
-    }
-    hr { margin: 1rem 0; border: 0.5px solid #e0e0e0; }
-    .footer {
+    .security-input {
+      background: rgba(0,245,255,0.05);
+      border: var(--border-cyber);
+      border-radius: var(--radius-sm);
+      color: var(--cyber);
+      font-family: var(--font-tech);
+      font-size: 1.1rem;
+      font-weight: 700;
       text-align: center;
-      font-size: 0.7rem;
-      color: #888;
-      margin-top: 1.5rem;
-      margin-bottom: 0.5rem;
+      width: 90px;
+      padding: 8px 6px;
+      outline: none;
+      transition: border-color var(--transition), box-shadow var(--transition);
+      -moz-appearance: textfield;
     }
-    .block-title {
-      background: #0b5e2e;
-      color: white;
-      padding: 0.2rem 0.6rem;
-      border-radius: 6px;
-      font-size: 0.8rem;
-      display: inline-block;
-      margin: 0.3rem 0;
+    .security-input::-webkit-outer-spin-button,
+    .security-input::-webkit-inner-spin-button { -webkit-appearance: none; }
+    .security-input:focus {
+      border-color: var(--cyber);
+      box-shadow: 0 0 10px var(--cyber-glow);
     }
-    .scroll-hint {
+    .security-unit {
+      font-family: var(--font-aggro);
+      font-size: 0.9rem;
+      color: var(--grey-mid);
+    }
+    .security-status {
+      font-family: var(--font-data);
       font-size: 0.65rem;
-      color: #888;
-      text-align: right;
-      margin-top: -0.3rem;
-      margin-bottom: 0.4rem;
+      letter-spacing: 0.1em;
+      padding: 3px 8px;
+      border-radius: var(--radius-sm);
+      text-transform: uppercase;
+      transition: all var(--transition);
+    }
+    .security-status.ok {
+      color: #00ff88;
+      background: rgba(0,255,136,0.1);
+      border: 1px solid rgba(0,255,136,0.4);
+    }
+    .security-status.warn {
+      color: var(--gold);
+      background: rgba(255,204,0,0.1);
+      border: 1px solid rgba(255,204,0,0.4);
+      animation: warnPulse 1.2s infinite;
+    }
+    .security-status.danger {
+      color: var(--blood);
+      background: rgba(255,26,46,0.12);
+      border: 1px solid var(--blood);
+      animation: alertBlink 0.7s infinite;
+    }
+    @keyframes warnPulse {
+      0%,100% { opacity: 1; }
+      50% { opacity: 0.6; }
+    }
+    .security-threshold {
+      font-family: var(--font-data);
+      font-size: 0.55rem;
+      color: var(--grey-mid);
+      letter-spacing: 0.08em;
+    }
+
+    /* ════════════════════════════════════════════════════════════
+       PROGRESSION GLOBALE
+    ════════════════════════════════════════════════════════════ */
+    #progress-section {
+      margin-top: 20px;
+    }
+    .progress-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .progress-title {
+      font-family: var(--font-tech);
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      color: var(--gold);
+      text-transform: uppercase;
+    }
+    .progress-pct {
+      font-family: var(--font-tech);
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--gold);
+      text-shadow: 0 0 8px var(--gold-glow);
+    }
+    .progress-track {
+      height: 10px;
+      background: var(--void-4);
+      border-radius: 5px;
+      overflow: hidden;
+      border: 1px solid var(--grey-dim);
+      position: relative;
+    }
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--blood), var(--gold));
+      border-radius: 5px;
+      transition: width 1s ease;
+      position: relative;
+    }
+    .progress-fill::after {
+      content: '';
+      position: absolute;
+      top: 0; right: 0; bottom: 0; width: 3px;
+      background: white;
+      box-shadow: 0 0 6px var(--gold);
+    }
+    .progress-phase-labels {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 6px;
+    }
+    .progress-phase-label {
+      font-family: var(--font-data);
+      font-size: 0.5rem;
+      color: var(--grey-mid);
+      letter-spacing: 0.08em;
+    }
+
+    /* ════════════════════════════════════════════════════════════
+       BLOCS DE PROGRAMME — NAVIGATION
+    ════════════════════════════════════════════════════════════ */
+    #bloc-nav {
+      display: flex;
+      gap: 10px;
+      margin-top: 28px;
+      flex-wrap: wrap;
+    }
+    .bloc-btn {
+      flex: 1;
+      min-width: 160px;
+      padding: 12px 16px;
+      background: var(--void-3);
+      border: var(--border-blood);
+      border-radius: var(--radius-md);
+      color: var(--white-soft);
+      font-family: var(--font-tech);
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all var(--transition);
+      position: relative;
+      overflow: hidden;
+      text-align: center;
+    }
+    .bloc-btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, var(--blood-glow), transparent);
+      opacity: 0;
+      transition: opacity var(--transition);
+    }
+    .bloc-btn:hover::before,
+    .bloc-btn.active::before { opacity: 1; }
+    .bloc-btn.active {
+      border-color: var(--blood);
+      color: var(--blood);
+      box-shadow: 0 0 16px var(--blood-glow);
+    }
+    .bloc-btn:hover:not(.active) {
+      border-color: rgba(255,26,46,0.6);
+      transform: translateY(-1px);
+    }
+    .bloc-btn .bloc-num {
+      display: block;
+      font-family: var(--font-tech);
+      font-size: 0.55rem;
+      color: var(--grey-mid);
+      margin-bottom: 3px;
+    }
+
+    /* ════════════════════════════════════════════════════════════
+       SEMAINE NAVIGATION
+    ════════════════════════════════════════════════════════════ */
+    #week-nav {
+      display: flex;
+      gap: 8px;
+      margin-top: 14px;
+      flex-wrap: wrap;
+    }
+    .week-btn {
+      padding: 7px 14px;
+      background: var(--void-3);
+      border: 1px solid var(--grey-dim);
+      border-radius: var(--radius-sm);
+      color: var(--grey-mid);
+      font-family: var(--font-data);
+      font-size: 0.6rem;
+      letter-spacing: 0.1em;
+      cursor: pointer;
+      transition: all var(--transition);
+      text-transform: uppercase;
+    }
+    .week-btn:hover { border-color: rgba(0,245,255,0.4); color: var(--cyber); }
+    .week-btn.active {
+      border-color: var(--cyber);
+      color: var(--cyber);
+      background: rgba(0,245,255,0.06);
+      box-shadow: 0 0 8px var(--cyber-glow);
+    }
+    .week-btn.completed {
+      border-color: rgba(0,255,136,0.35);
+      color: rgba(0,255,136,0.7);
+    }
+
+    /* ════════════════════════════════════════════════════════════
+       SECTION SÉANCE — WEEK HEADER
+    ════════════════════════════════════════════════════════════ */
+    #week-header {
+      margin-top: 20px;
+      padding: 18px 22px;
+      background: var(--void-3);
+      border-left: 3px solid var(--blood);
+      border-radius: var(--radius-md);
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 16px;
+      align-items: center;
+    }
+    .week-title-main {
+      font-family: var(--font-epic);
+      font-size: clamp(1rem, 2.5vw, 1.5rem);
+      color: var(--blood);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+    .week-subtitle {
+      font-family: var(--font-data);
+      font-size: 0.62rem;
+      color: var(--cyber-dim);
+      letter-spacing: 0.15em;
+      margin-top: 4px;
+    }
+    .week-focus-badge {
+      font-family: var(--font-tech);
+      font-size: 0.6rem;
+      letter-spacing: 0.12em;
+      color: var(--gold);
+      border: var(--border-gold);
+      padding: 5px 12px;
+      clip-path: polygon(6px 0%, 100% 0%, calc(100% - 6px) 100%, 0% 100%);
+      background: rgba(255,204,0,0.06);
+      text-transform: uppercase;
+      text-align: center;
+    }
+
+    /* ════════════════════════════════════════════════════════════
+       JOURS D'ENTRAINEMENT — GRID
+    ════════════════════════════════════════════════════════════ */
+    #days-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 16px;
+      margin-top: 20px;
+    }
+
+    /* Carte d'un jour */
+    .day-card {
+      background: var(--void-3);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      border: 1px solid var(--grey-dim);
+      transition: transform var(--transition), box-shadow var(--transition);
+    }
+    .day-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.5);
+    }
+
+    .day-header {
+      padding: 14px 18px 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      position: relative;
+    }
+    .day-header::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, var(--blood-glow), transparent);
+    }
+    .day-name {
+      font-family: var(--font-epic);
+      font-size: 1.05rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .day-type {
+      font-family: var(--font-data);
+      font-size: 0.55rem;
+      letter-spacing: 0.1em;
+      color: var(--cyber-dim);
+      margin-top: 2px;
+      text-transform: uppercase;
+    }
+    .day-tag {
+      font-family: var(--font-tech);
+      font-size: 0.55rem;
+      letter-spacing: 0.1em;
+      padding: 3px 8px;
+      border-radius: 2px;
+      text-transform: uppercase;
+    }
+    .day-tag.vitesse  { background: rgba(255,26,46,0.15); color: var(--blood); border: 1px solid rgba(255,26,46,0.3); }
+    .day-tag.force    { background: rgba(255,204,0,0.1);  color: var(--gold);  border: 1px solid rgba(255,204,0,0.3); }
+    .day-tag.recup    { background: rgba(0,245,255,0.08); color: var(--cyber); border: 1px solid rgba(0,245,255,0.25); }
+    .day-tag.repos    { background: rgba(80,80,80,0.15);  color: var(--grey-mid); border: 1px solid var(--grey-dim); }
+    .day-tag.aw       { background: rgba(255,204,0,0.12); color: var(--gold);  border: 1px solid rgba(255,204,0,0.35); }
+    .day-tag.test     { background: rgba(0,245,255,0.12); color: var(--cyber); border: 1px solid rgba(0,245,255,0.4); }
+
+    .day-body { padding: 14px 18px 16px; }
+
+    /* Phases / échauffement / cool-down */
+    .day-phase {
+      margin-bottom: 12px;
+    }
+    .phase-title {
+      font-family: var(--font-data);
+      font-size: 0.58rem;
+      letter-spacing: 0.2em;
+      color: var(--blood);
+      text-transform: uppercase;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .phase-title::before {
+      content: '';
+      display: inline-block;
+      width: 14px; height: 1px;
+      background: var(--blood);
+    }
+    .phase-title.cyan  { color: var(--cyber-dim); }
+    .phase-title.cyan::before  { background: var(--cyber-dim); }
+    .phase-title.gold  { color: var(--gold-dim); }
+    .phase-title.gold::before  { background: var(--gold-dim); }
+
+    /* Exercice item */
+    .exercise-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      cursor: pointer;
+      transition: background var(--transition);
+      border-radius: 4px;
+      padding: 8px 6px;
+      margin: 0 -6px;
+    }
+    .exercise-item:last-child { border-bottom: none; }
+    .exercise-item:hover { background: rgba(255,255,255,0.03); }
+
+    .ex-check {
+      width: 16px; height: 16px;
+      border: 1px solid var(--grey-dim);
+      border-radius: 2px;
+      flex-shrink: 0;
+      margin-top: 2px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all var(--transition);
+    }
+    .exercise-item.done .ex-check {
+      background: rgba(0,255,136,0.15);
+      border-color: rgba(0,255,136,0.6);
+    }
+    .exercise-item.done .ex-check::after {
+      content: '✓';
+      font-size: 0.65rem;
+      color: #00ff88;
+    }
+    .exercise-item.done .ex-name { text-decoration: line-through; opacity: 0.5; }
+
+    .ex-info { flex: 1; }
+    .ex-name {
+      font-family: var(--font-aggro);
+      font-size: 1rem;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      color: var(--white-soft);
+      line-height: 1.2;
+    }
+    .ex-details {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 3px;
+    }
+    .ex-chip {
+      font-family: var(--font-data);
+      font-size: 0.55rem;
+      letter-spacing: 0.08em;
+      padding: 1px 5px;
+      border-radius: 2px;
+      text-transform: uppercase;
+    }
+    .ex-chip.series { background: rgba(255,26,46,0.1); color: var(--blood); }
+    .ex-chip.reps   { background: rgba(255,204,0,0.08); color: var(--gold-dim); }
+    .ex-chip.recup  { background: rgba(0,245,255,0.06); color: var(--cyber-dim); }
+    .ex-chip.intensity { background: rgba(255,255,255,0.05); color: var(--grey-mid); }
+
+    .ex-note {
+      font-family: var(--font-data);
+      font-size: 0.55rem;
+      color: var(--grey-mid);
+      margin-top: 4px;
+      letter-spacing: 0.06em;
       font-style: italic;
     }
-    /* Rendre les tableaux jolis sur petit écran */
-    table:not(.no-scroll) {
-      min-width: 100%;
+
+    /* Carte repos */
+    .repos-card {
+      padding: 30px;
+      text-align: center;
     }
+    .repos-icon {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+      filter: grayscale(0.5);
+    }
+    .repos-text {
+      font-family: var(--font-tech);
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      color: var(--grey-mid);
+      text-transform: uppercase;
+    }
+    .repos-mandate {
+      font-family: var(--font-aggro);
+      font-size: 1.1rem;
+      color: var(--cyber);
+      margin-top: 8px;
+      letter-spacing: 0.05em;
+    }
+
+    /* Progress bar par jour */
+    .day-progress {
+      margin-top: 12px;
+      height: 3px;
+      background: var(--grey-dim);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .day-progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--blood), var(--gold));
+      border-radius: 2px;
+      transition: width 0.5s ease;
+    }
+    .day-progress-label {
+      font-family: var(--font-data);
+      font-size: 0.5rem;
+      color: var(--grey-mid);
+      letter-spacing: 0.08em;
+      margin-top: 4px;
+      text-align: right;
+    }
+
+    /* ════════════════════════════════════════════════════════════
+       SECTION GRAPHIQUES
+    ════════════════════════════════════════════════════════════ */
+    #charts-section {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 24px;
+    }
+    @media (max-width: 800px) {
+      #charts-section { grid-template-columns: 1fr; }
+    }
+    .chart-card {
+      background: var(--void-3);
+      border: var(--border-blood);
+      border-radius: var(--radius-lg);
+      padding: 18px;
+      position: relative;
+      overflow: hidden;
+    }
+    .chart-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, var(--cyber), transparent);
+    }
+    .chart-title {
+      font-family: var(--font-tech);
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      color: var(--cyber);
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+    .chart-canvas {
+      width: 100%;
+      display: block;
+      border-radius: var(--radius-sm);
+    }
+
+    /* ════════════════════════════════════════════════════════════
+       SECTION ARM WRESTLING
+    ════════════════════════════════════════════════════════════ */
+    #aw-section {
+      margin-top: 24px;
+    }
+    .section-title {
+      font-family: var(--font-epic);
+      font-size: clamp(1rem, 2.5vw, 1.4rem);
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: var(--gold);
+      text-transform: uppercase;
+      text-shadow: 0 0 12px var(--gold-glow);
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(255,204,0,0.2);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .section-title::before {
+      content: '⚔';
+      font-size: 1.2rem;
+    }
+    .section-title.sprint::before { content: '⚡'; }
+    .section-title.chart::before  { content: '◈'; font-family: monospace; }
+
+    /* ════════════════════════════════════════════════════════════
+       RÈGLES D'OR — COMMANDEMENTS
+    ════════════════════════════════════════════════════════════ */
+    #commandements {
+      margin-top: 28px;
+      padding: 22px;
+      background: var(--void-3);
+      border: 1px solid rgba(255,204,0,0.2);
+      border-radius: var(--radius-lg);
+      position: relative;
+      overflow: hidden;
+    }
+    #commandements::before {
+      content: 'ORDRES';
+      position: absolute;
+      top: -12px; right: 20px;
+      font-family: var(--font-data);
+      font-size: 0.55rem;
+      letter-spacing: 0.25em;
+      color: var(--gold);
+      background: var(--void-3);
+      padding: 0 8px;
+    }
+    .cmd-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 12px;
+      margin-top: 10px;
+    }
+    .cmd-item {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      padding: 10px;
+      background: rgba(255,204,0,0.04);
+      border-radius: var(--radius-sm);
+      border-left: 2px solid var(--gold-dim);
+    }
+    .cmd-num {
+      font-family: var(--font-tech);
+      font-size: 0.9rem;
+      font-weight: 900;
+      color: var(--gold);
+      flex-shrink: 0;
+      min-width: 20px;
+    }
+    .cmd-text {
+      font-family: var(--font-aggro);
+      font-size: 1rem;
+      color: var(--white-soft);
+      line-height: 1.3;
+    }
+    .cmd-text strong { color: var(--blood); font-weight: 600; }
+
+    /* ════════════════════════════════════════════════════════════
+       FOOTER
+    ════════════════════════════════════════════════════════════ */
+    #main-footer {
+      margin-top: 40px;
+      padding: 24px;
+      text-align: center;
+      border-top: 1px solid rgba(255,26,46,0.15);
+      position: relative;
+    }
+    .footer-text {
+      font-family: var(--font-data);
+      font-size: 0.58rem;
+      letter-spacing: 0.2em;
+      color: var(--grey-mid);
+      text-transform: uppercase;
+    }
+    .footer-signature {
+      font-family: var(--font-epic);
+      font-size: 0.8rem;
+      color: var(--blood);
+      margin-top: 6px;
+      text-shadow: 0 0 8px var(--blood-glow);
+      letter-spacing: 0.1em;
+    }
+
+    /* ════════════════════════════════════════════════════════════
+       RESET BUTTON
+    ════════════════════════════════════════════════════════════ */
+    #reset-btn {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 100;
+      background: rgba(255,26,46,0.1);
+      border: var(--border-blood);
+      border-radius: var(--radius-md);
+      color: var(--blood);
+      font-family: var(--font-data);
+      font-size: 0.55rem;
+      letter-spacing: 0.15em;
+      padding: 8px 14px;
+      cursor: pointer;
+      transition: all var(--transition);
+      text-transform: uppercase;
+    }
+    #reset-btn:hover {
+      background: rgba(255,26,46,0.2);
+      box-shadow: 0 0 12px var(--blood-glow);
+    }
+
+    /* ════════════════════════════════════════════════════════════
+       BARRE LATÉRALE DÉCO — OPTIONNELLE
+    ════════════════════════════════════════════════════════════ */
+    .side-deco-left {
+      position: fixed;
+      left: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      z-index: 2;
+    }
+    .side-dot {
+      width: 4px; height: 4px;
+      border-radius: 50%;
+      background: var(--blood);
+      opacity: 0.5;
+      animation: dotFade 2s infinite;
+    }
+    .side-dot:nth-child(2) { animation-delay: 0.3s; background: var(--cyber); }
+    .side-dot:nth-child(3) { animation-delay: 0.6s; background: var(--gold); }
+    .side-dot:nth-child(4) { animation-delay: 0.9s; }
+    .side-dot:nth-child(5) { animation-delay: 1.2s; background: var(--cyber); }
+    @keyframes dotFade {
+      0%,100% { opacity: 0.3; }
+      50% { opacity: 0.8; }
+    }
+
+    /* ════════════════════════════════════════════════════════════
+       NOTIFICATION TOAST
+    ════════════════════════════════════════════════════════════ */
+    #toast {
+      position: fixed;
+      top: 20px; right: 20px;
+      z-index: 9998;
+      padding: 10px 18px;
+      background: var(--void-3);
+      border-left: 3px solid var(--cyber);
+      border-radius: var(--radius-sm);
+      font-family: var(--font-data);
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      color: var(--cyber);
+      transform: translateX(120%);
+      transition: transform 0.4s cubic-bezier(0.4,0,0.2,1);
+      max-width: 280px;
+    }
+    #toast.show { transform: translateX(0); }
+
+    /* ════════════════════════════════════════════════════════════
+       RESPONSIVENESS
+    ════════════════════════════════════════════════════════════ */
+    @media (max-width: 900px) {
+      .top-grid { grid-template-columns: 1fr; }
+      #days-grid { grid-template-columns: 1fr; }
+      .side-deco-left { display: none; }
+    }
+    @media (max-width: 600px) {
+      #app { padding: 0 12px 40px; }
+      #week-header { grid-template-columns: 1fr; }
+      .countdown-grid { grid-template-columns: repeat(4, 1fr); gap: 6px; }
+    }
+
+    /* ════════════════════════════════════════════════════════════
+       ANIMATIONS D'ENTRÉE
+    ════════════════════════════════════════════════════════════ */
+    .fade-in {
+      animation: fadeInUp 0.6s cubic-bezier(0.4,0,0.2,1) both;
+    }
+    .fade-in-d1 { animation-delay: 0.1s; }
+    .fade-in-d2 { animation-delay: 0.2s; }
+    .fade-in-d3 { animation-delay: 0.3s; }
+    .fade-in-d4 { animation-delay: 0.4s; }
+    .fade-in-d5 { animation-delay: 0.5s; }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Clip-path cyber-ninja décoration */
+    .cyber-frame {
+      clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 14px 100%, 0 calc(100% - 14px));
+    }
+
+    /* ════════════════════════════════════════════════════════════
+       INDICATEUR DE BLOC ACTIF
+    ════════════════════════════════════════════════════════════ */
+    .bloc-indicator {
+      display: flex;
+      gap: 6px;
+      margin-top: 10px;
+    }
+    .bloc-seg {
+      flex: 1;
+      height: 4px;
+      background: var(--grey-dim);
+      border-radius: 2px;
+      transition: background 0.5s;
+    }
+    .bloc-seg.active-b1 { background: var(--blood); box-shadow: 0 0 6px var(--blood); }
+    .bloc-seg.active-b2 { background: var(--gold);  box-shadow: 0 0 6px var(--gold); }
+    .bloc-seg.active-b3 { background: var(--cyber); box-shadow: 0 0 6px var(--cyber); }
+    .bloc-seg.active-b4 { background: #ff8800; box-shadow: 0 0 6px #ff8800; }
+
+    /* ════════════════════════════════════════════════════════════
+       CORNER DECO CARDS
+    ════════════════════════════════════════════════════════════ */
+    .corner-tl, .corner-br {
+      position: absolute;
+      width: 10px; height: 10px;
+      pointer-events: none;
+    }
+    .corner-tl {
+      top: 6px; left: 6px;
+      border-top: 1px solid var(--blood);
+      border-left: 1px solid var(--blood);
+    }
+    .corner-br {
+      bottom: 6px; right: 6px;
+      border-bottom: 1px solid var(--blood);
+      border-right: 1px solid var(--blood);
+    }
+
+    /* ════════════════════════════════════════════════════════════
+       SECTION TITRE INTERMÉDIAIRE
+    ════════════════════════════════════════════════════════════ */
+    .inter-title {
+      font-family: var(--font-tech);
+      font-size: 0.65rem;
+      letter-spacing: 0.3em;
+      color: var(--blood);
+      text-transform: uppercase;
+      padding: 6px 0;
+      border-bottom: 1px solid rgba(255,26,46,0.2);
+      margin: 20px 0 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .inter-title::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, rgba(255,26,46,0.2), transparent);
+    }
+
+    /* ════════════════════════════════════════════════════════════
+       ALERTE SPÉCIFIQUE SAUT / SOMMEIL
+    ════════════════════════════════════════════════════════════ */
+    .inline-alert {
+      display: none;
+      padding: 8px 12px;
+      background: rgba(255,26,46,0.08);
+      border: 1px solid rgba(255,26,46,0.5);
+      border-radius: var(--radius-sm);
+      font-family: var(--font-data);
+      font-size: 0.6rem;
+      letter-spacing: 0.1em;
+      color: var(--blood);
+      margin-top: 8px;
+      animation: alertBlink 1s infinite;
+    }
+    .inline-alert.active { display: block; }
+
   </style>
 </head>
 <body>
-<header>
-  <h1>NADHIR – Programme Définitif</h1>
-  <p>Compétition 30 juillet 2026<br>Objectifs : 100m · 120cm · Bras de fer</p>
-</header>
 
-<!-- PROFIL -->
-<div class="card">
-  <h2>🧬 Profil Athlète</h2>
-  <div class="grid-2">
-    <div>
-      <strong>Nom :</strong> Nadhir<br>
-      <strong>Âge :</strong> 22 ans (30/06/2003)<br>
-      <strong>Poids :</strong> 67 kg (12‑13% BF) – cible ~64 kg<br>
-      <strong>Taille :</strong> 172 cm<br>
-      <strong>Fibres :</strong> mixte<br>
-      <strong>Blessures :</strong> LCL gauche réhabilité
-    </div>
-    <div>
-      <strong>Performances :</strong>
-      <ul>
-        <li>100m : 12.6s (départ 4 points)</li>
-        <li>60m : 7.95s / 30m : 4.57s</li>
-        <li>Détente 2 pieds élan : 72 cm</li>
-        <li>Squat 110 kg / Deadlift 110 kg</li>
-        <li>Traction lestée +35 kg</li>
-        <li>Nordic curl : 0 rép. parfaite</li>
-        <li>Curl marteau strict : 22 kg</li>
-      </ul>
-    </div>
+  <!-- ═══════════════════════════════════════════════════════════
+       CANVAS PARTICLES ARRIÈRE-PLAN
+  ════════════════════════════════════════════════════════════ -->
+  <canvas id="particleCanvas"></canvas>
+
+  <!-- TOAST NOTIFICATION -->
+  <div id="toast">▸ Exercice enregistré</div>
+
+  <!-- DÉCO LATÉRALE -->
+  <div class="side-deco-left" aria-hidden="true">
+    <div class="side-dot"></div>
+    <div class="side-dot"></div>
+    <div class="side-dot"></div>
+    <div class="side-dot"></div>
+    <div class="side-dot"></div>
   </div>
-</div>
 
-<!-- OBJECTIFS -->
-<div class="card">
-  <h2>🎯 Objectifs & Jalons</h2>
-  <div class="scroll-hint">← défiler le tableau →</div>
-  <table>
-    <tr><th>Année</th><th>Âge</th><th>100m</th><th>Détente</th><th>Bras de fer</th><th>Événement</th></tr>
-    <tr><td>2026</td><td>23</td><td><span class="tag tag-amber">12.0‑12.2</span></td><td>85‑90 cm</td><td>Développement top‑roll</td><td>Compétition 30/07</td></tr>
-    <tr><td>2027</td><td>24</td><td>11.3‑11.5</td><td>95‑100 cm</td><td>Force spécifique</td><td></td></tr>
-    <tr><td>2028</td><td>25</td><td>10.8‑11.0</td><td>100‑105 cm</td><td><span class="tag tag-green">⚔ VICTOIRE</span></td><td>30/06/2028</td></tr>
-    <tr><td>2029</td><td>26</td><td>10.4‑10.6</td><td>110‑112 cm</td><td>Maintien</td><td></td></tr>
-    <tr><td>2030</td><td>27</td><td>10.1‑10.3</td><td>115‑117 cm</td><td>Maintien</td><td></td></tr>
-    <tr><td>2031</td><td>28</td><td><span class="tag tag-green">10.00s</span></td><td><span class="tag tag-green">120 cm</span></td><td>Consolidation</td><td>Pic de carrière</td></tr>
-  </table>
-</div>
+  <!-- ═══════════════════════════════════════════════════════════
+       APPLICATION PRINCIPALE
+  ════════════════════════════════════════════════════════════ -->
+  <div id="app">
 
-<!-- PLANIFICATION BLOCS -->
-<div class="card">
-  <h2>📅 Macrocycle Pré‑Compétition</h2>
-  <p style="font-size:0.8rem;">5 mai – 26 juillet 2026</p>
-  <div class="grid-3">
-    <div>
-      <span class="block-title">Bloc 1</span><br>
-      <strong>Accumulation</strong><br>
-      Semaines 1‑4 (5 mai – 31 mai)<br>
-      <small>Correction technique, ischios, drop jumps.</small>
+    <!-- ─── HEADER HÉROÏQUE ─────────────────────────────────── -->
+    <header id="main-header" class="fade-in">
+      <div class="header-badge">◈ SHADOW ASSASSIN CORE v2.0 ◈</div>
+      <h1 class="header-title" data-text="OVERDRIVE MAX-V">
+        <span class="blood">OVERDRIVE</span>&nbsp;<span class="cyber">MAX-V</span>
+      </h1>
+      <div class="header-subtitle">SYSTÈME D'ENTRAÎNEMENT ÉLITE — CONTRÔLE TOTAL</div>
+      <div class="header-athlete">⚡ AMINE — EXÉCUTE. NE DISCUTE PAS. ⚡</div>
+      <div class="header-line">
+        <div class="header-line-seg"></div>
+        <div class="header-line-diamond"></div>
+        <div class="header-line-seg right"></div>
+      </div>
+    </header>
+
+    <!-- ─── ALERTE GLOBALE ──────────────────────────────────── -->
+    <div id="global-alert">
+      ⚠ ALERTE SHADOW — CONDITION NON OPTIMALE — PROTOCOLE RÉDUIT ACTIVÉ ⚠
     </div>
-    <div>
-      <span class="block-title" style="background:#c99c00;">Bloc 2</span><br>
-      <strong>Transformation</strong><br>
-      Semaines 5‑8 (1 juin – 28 juin)<br>
-      <small>Force → vitesse, plio choc, sprints 100%.</small>
+
+    <!-- ─── GRID SUPÉRIEUR ──────────────────────────────────── -->
+    <div class="top-grid">
+
+      <!-- COUNTDOWN -->
+      <div class="card fade-in fade-in-d1" id="countdown-card">
+        <div class="corner-tl"></div>
+        <div class="corner-br"></div>
+        <div class="card-label">COMPTE À REBOURS — COMPÉTITION</div>
+        <div class="countdown-grid">
+          <div class="countdown-unit">
+            <div class="countdown-value" id="cd-days">--</div>
+            <div class="countdown-label">JOURS</div>
+          </div>
+          <div class="countdown-unit">
+            <div class="countdown-value" id="cd-hours">--</div>
+            <div class="countdown-label">HEURES</div>
+          </div>
+          <div class="countdown-unit">
+            <div class="countdown-value" id="cd-mins">--</div>
+            <div class="countdown-label">MIN</div>
+          </div>
+          <div class="countdown-unit">
+            <div class="countdown-value" id="cd-secs">--</div>
+            <div class="countdown-label">SEC</div>
+          </div>
+        </div>
+        <div class="countdown-date">🏆 OBJECTIF : 1ER AOÛT 2026 — 10:00</div>
+        <div class="bloc-indicator" id="bloc-indicator">
+          <div class="bloc-seg" id="seg-b1" title="Bloc 1 · S1-S3"></div>
+          <div class="bloc-seg" id="seg-b2" title="Bloc 2 · S4-S7"></div>
+          <div class="bloc-seg" id="seg-b3" title="Bloc 3 · S8-S10"></div>
+          <div class="bloc-seg" id="seg-b4" title="Peaking · S11"></div>
+        </div>
+      </div>
+
+      <!-- OBJECTIF CHRONO -->
+      <div class="card gold-card fade-in fade-in-d2">
+        <div class="corner-tl" style="border-color:var(--gold)"></div>
+        <div class="corner-br" style="border-color:var(--gold)"></div>
+        <div class="card-label">OBJECTIF CHRONO 100M</div>
+        <div class="chrono-display">
+          <div class="chrono-current" id="chrono-current">13.30s</div>
+          <div class="chrono-arrow">↓</div>
+          <div class="chrono-target">CIBLE : 12.55 – 12.65s</div>
+          <div class="chrono-delta" id="chrono-delta">DELTA : −0.75s</div>
+          <div class="chrono-progress-bar">
+            <div class="chrono-progress-fill" id="chrono-progress" style="width:0%"></div>
+          </div>
+          <div style="margin-top:6px; display:flex; justify-content:space-between;">
+            <span style="font-family:var(--font-data);font-size:0.5rem;color:var(--grey-mid)">13.30s — BASE</span>
+            <span style="font-family:var(--font-data);font-size:0.5rem;color:var(--cyber-dim)">PRÉDICTION : <span id="chrono-pred">13.30s</span></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- MONITORING SÉCURITÉ -->
+      <div class="card cyber-card fade-in fade-in-d3">
+        <div class="corner-tl" style="border-color:var(--cyber)"></div>
+        <div class="corner-br" style="border-color:var(--cyber)"></div>
+        <div class="card-label">MONITORING SÉCURITÉ — QUOTIDIEN</div>
+        <div class="security-inputs">
+
+          <!-- SOMMEIL -->
+          <div class="security-field">
+            <div class="security-field-label">💤 SOMMEIL NUIT DERNIÈRE</div>
+            <div class="security-input-row">
+              <input
+                type="number" step="0.5" min="0" max="12"
+                class="security-input" id="sleep-input"
+                placeholder="7.5"
+                aria-label="Heures de sommeil"
+              />
+              <span class="security-unit">heures</span>
+              <span class="security-status" id="sleep-status">—</span>
+            </div>
+            <div class="security-threshold">SEUIL CRITIQUE : &lt; 7h30 → SPRINT MAX INTERDIT</div>
+            <div class="inline-alert" id="sleep-alert">
+              ⛔ SOMMEIL INSUFFISANT — SPRINT MAXIMAL INTERDIT CE JOUR
+            </div>
+          </div>
+
+          <!-- CMJ SAUT VERTICAL -->
+          <div class="security-field">
+            <div class="security-field-label">📏 SAUT VERTICAL MATINAL (CMJ)</div>
+            <div class="security-input-row">
+              <input
+                type="number" step="1" min="0" max="80"
+                class="security-input" id="cmj-input"
+                placeholder="42"
+                aria-label="Saut vertical CMJ en cm"
+              />
+              <span class="security-unit">cm</span>
+              <span class="security-status" id="cmj-status">—</span>
+            </div>
+            <div class="security-threshold">SEUIL CRITIQUE : &lt; 38cm → VOLUME −50% MINIMUM</div>
+            <div class="inline-alert" id="cmj-alert">
+              ⛔ CMJ CRITIQUE — VOLUME RÉDUIT 50% — PROTOCOLE ALLÉGÉ ACTIVÉ
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div><!-- /top-grid -->
+
+    <!-- ─── PROGRESSION GLOBALE ──────────────────────────────── -->
+    <div id="progress-section" class="fade-in fade-in-d4">
+      <div class="progress-header">
+        <span class="progress-title">◈ PROGRESSION GLOBALE PROGRAMME 11 SEMAINES</span>
+        <span class="progress-pct" id="global-pct">0%</span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" id="global-progress-fill" style="width:0%"></div>
+      </div>
+      <div class="progress-phase-labels">
+        <span class="progress-phase-label">S1 — CÂBLAGE</span>
+        <span class="progress-phase-label">S4 — VITESSE MAX</span>
+        <span class="progress-phase-label">S8 — AFFÛTAGE</span>
+        <span class="progress-phase-label">S11 — PEAKING</span>
+        <span class="progress-phase-label">🏆 COMP</span>
+      </div>
     </div>
-    <div>
-      <span class="block-title" style="background:#b71c1c;">Bloc 3</span><br>
-      <strong>Affûtage</strong><br>
-      Semaines 9‑12 (29 juin – 26 juillet)<br>
-      <small>Volume réduit, vitesse pure.</small>
+
+    <!-- ─── NAVIGATION BLOCS ─────────────────────────────────── -->
+    <div id="bloc-nav" class="fade-in fade-in-d5">
+      <button class="bloc-btn active" data-bloc="1" onclick="setBloc(1)">
+        <span class="bloc-num">BLOC 1 · S1-S3</span>
+        CÂBLAGE NEUROMUSCULAIRE
+      </button>
+      <button class="bloc-btn" data-bloc="2" onclick="setBloc(2)">
+        <span class="bloc-num">BLOC 2 · S4-S7</span>
+        VITESSE SUPRA-MAXIMALE
+      </button>
+      <button class="bloc-btn" data-bloc="3" onclick="setBloc(3)">
+        <span class="bloc-num">BLOC 3 · S8-S10</span>
+        AFFÛTAGE & SURCOMPENSATION
+      </button>
+      <button class="bloc-btn" data-bloc="4" onclick="setBloc(4)">
+        <span class="bloc-num">BLOC 4 · S11</span>
+        PEAKING + COMPÉTITION
+      </button>
     </div>
-  </div>
-  <p style="margin-top:0.8rem;font-size:0.8rem;">
-    <strong>Décharge (sem. 4, 8, 12) :</strong><br>
-    • Sprint : -30% volume<br>
-    • Pliométrie : -40%<br>
-    • Force : charges maintenues, RPE -1
-  </p>
-</div>
 
-<!-- SEMAINE TYPE COMPLÈTE -->
-<div class="card">
-  <h2>📆 Structure Hebdomadaire</h2>
+    <!-- ─── NAVIGATION SEMAINES ──────────────────────────────── -->
+    <div id="week-nav"></div>
 
-  <!-- LUNDI -->
-  <h3>🏁 Lundi – Sprint Technique</h3>
-  <div class="scroll-hint">← défiler le tableau →</div>
-  <table>
-    <tr><th>Exercice</th><th>Bloc 1</th><th>Bloc 2</th><th>Bloc 3</th></tr>
-    <tr><td>Échauffement</td><td colspan="3">Footing 10' + gammes 10' + <strong>Wall drill</strong> (statique 2×30s/jambe, dynamique 2×10 pas)</td></tr>
-    <tr><td>Départs 4 points</td><td>4×10m résisté (élastique), repos 2'</td><td>3×20m résisté + 2×10m libre, repos 2'</td><td>4×10m libre avec signal sonore, repos 2'</td></tr>
-    <tr><td>Sprint technique</td><td>3×30m à 95%, repos 4'</td><td>3×60m à 98‑100%, repos 7‑8'</td><td>2×80m à 100% (chrono), repos 10'</td></tr>
-    <tr><td>Volume sprint</td><td>~210m</td><td>~250m</td><td>~180m</td></tr>
-    <tr><td>Pliométrie basse</td><td colspan="2">Pogo jumps 3×20 contacts (1') + Sauts pieds joints 3×6 à 70‑75%</td><td>Pogo 2×20 contacts, sauts joints 2×6</td></tr>
-    <tr><td>Retour au calme</td><td colspan="3">10' étirements + gainage planche 3×30s</td></tr>
-  </table>
-  <div class="note">🎥 Filme chaque départ (profil) – angle ~45°, poussée horizontale.</div>
-
-  <!-- MARDI -->
-  <h3>🏋️ Mardi – Force Bas + Isométrie mollets</h3>
-  <div class="scroll-hint">← défiler le tableau →</div>
-  <table>
-    <tr><th>Exercice</th><th>Bloc 1</th><th>Bloc 2</th><th>Bloc 3</th></tr>
-    <tr><td>Squat profond</td><td>4×5 <span class="number">82‑88kg</span> (75‑80%)</td><td>4×4 <span class="number">90‑95kg</span> (82‑87%)</td><td>3×3 <span class="number">93‑99kg</span> (85‑90%)</td></tr>
-    <tr><td>Hip Thrust (explosif)</td><td>4×6 <span class="number">88kg</span> (80%)</td><td>4×4 <span class="number">93kg</span> (85%)</td><td>3×3 <span class="number">97kg</span> (88%)</td></tr>
-    <tr><td>Trap Bar Deadlift</td><td>3×5 <span class="number">93kg</span> (85%)</td><td>3×3 <span class="number">99kg</span> (90%)</td><td>2×3 <span class="number">99kg</span> (maintien)</td></tr>
-    <tr><td>Nordic Curl (excentrique)</td><td>4×3 (descente 5s)</td><td>4×4 (descente 3s)</td><td>3×3 (descente 2s)</td></tr>
-    <tr><td>Fentes bulgares</td><td>3×6/jambe <span class="number">20‑25kg</span></td><td>3×5/jambe <span class="number">25‑30kg</span></td><td>2×5/jambe <span class="number">30kg</span></td></tr>
-    <tr><td>Isométrie mollets ★</td><td colspan="3"><strong>Genou tendu</strong> 2×30‑45s + <strong>genou fléchi</strong> 2×30‑45s (fin de séance)</td></tr>
-    <tr><td>Repos</td><td>2'30 – 3'</td><td>3'</td><td>3' – 4'</td></tr>
-  </table>
-  <div class="warning">⚠️ Priorité Nordic Curl – utiliser un élastique si descente impossible. ★ Isométrie mollets = rigidité cheville.</div>
-
-  <!-- MERCREDI BD A -->
-  <h3>🤼 Mercredi – Bras de Fer A (Force Max Top‑Roll)</h3>
-  <div class="scroll-hint">← défiler le tableau →</div>
-  <table>
-    <tr><th>Exercice</th><th>Bloc 1</th><th>Bloc 2</th><th>Bloc 3</th></tr>
-    <tr><td>Back Pressure poulie haute</td><td>4×6 <span class="number">29‑30kg</span></td><td>4×5 <span class="number">32‑34kg</span></td><td>3×3 <span class="number">34‑36kg</span></td></tr>
-    <tr><td>Pronation lourde poulie</td><td>4×6‑8 <span class="number">11.3kg</span></td><td>4×5‑6 <span class="number">12.5kg</span></td><td>3×4‑6 <span class="number">13‑14kg</span></td></tr>
-    <tr><td>Riser (poulie basse)</td><td>3×8 <span class="number">18kg</span></td><td>3×6 <span class="number">20kg</span></td><td>2×6 <span class="number">22kg</span></td></tr>
-    <tr><td>Isométrie combinée</td><td>3×15s <span class="number">50kg</span></td><td>3×20s <span class="number">55kg</span></td><td>3×25s <span class="number">60kg</span></td></tr>
-    <tr><td>Grip épais</td><td>2× hold max</td><td>2× hold max +2.5kg</td><td>2× hold max</td></tr>
-  </table>
-  <p style="font-size:0.75rem;">Progression : +0.5‑1 kg/2 sem. Isométrie : +1‑2 sec/sem.</p>
-
-  <!-- JEUDI -->
-  <h3>🏁 Jeudi – Sprint Accélération + Bonds + Hops</h3>
-  <div class="scroll-hint">← défiler le tableau →</div>
-  <table>
-    <tr><th>Exercice</th><th>Bloc 1</th><th>Bloc 2</th><th>Bloc 3</th></tr>
-    <tr><td>Départs résistés</td><td>4×10m</td><td>3×15m</td><td>3×10m libre (signal)</td></tr>
-    <tr><td>Sprint 60m</td><td>2×60m à 95%, repos 6'</td><td>2×60m à 100% (chrono), repos 8'</td><td>2×60m à 100%, repos 8'</td></tr>
-    <tr><td>Bonds horizontaux (5 bonds)</td><td>3 séries, repos 2'</td><td>4 séries, repos 2'</td><td>3 séries (qualité)</td></tr>
-    <tr><td>Hops unipodaux bas ★</td><td colspan="3"><strong>2×15/jambe</strong> (petits bonds, cheville verrouillée)</td></tr>
-  </table>
-  <div class="note">★ Hops unipodaux = stabilité cheville (PDF SUB 11 UP 50).</div>
-
-  <!-- VENDREDI -->
-  <h3>⚡ Vendredi – Pliométrie + Force Explosive</h3>
-  <div class="scroll-hint">← défiler le tableau →</div>
-  <table>
-    <tr><th>Exercice</th><th>Bloc 1</th><th>Bloc 2</th><th>Bloc 3</th></tr>
-    <tr><td>Drop Jumps</td><td>5×3 depuis <span class="number">40 cm</span></td><td>5×3 depuis <span class="number">45‑50 cm</span></td><td>4×3 depuis <span class="number">40 cm</span></td></tr>
-    <tr><td>Trap Bar Jumps</td><td>5×3 <span class="number">30‑35 kg</span></td><td>5×2 <span class="number">35‑40 kg</span></td><td>4×2 <span class="number">35‑40 kg</span></td></tr>
-    <tr><td>Squat sauté</td><td>3×5 <span class="number">20 kg</span></td><td>4×4 <span class="number">25 kg</span></td><td>3×4 <span class="number">20 kg</span></td></tr>
-    <tr><td>Pompes claquées</td><td>3×6</td><td>3×8</td><td>3×6</td></tr>
-    <tr><td>Isométrie mollets</td><td colspan="3"><strong>Genou tendu + fléchi</strong> 2×30‑45s chaque (fin)</td></tr>
-  </table>
-  <div class="note">Drop jump : temps de contact < 0.2s. Si perte >5%, baisse la boîte.</div>
-
-  <!-- SAMEDI BD B -->
-  <h3>🤼 Samedi – Bras de Fer B (Tendons & Stabilité)</h3>
-  <div class="scroll-hint">← défiler le tableau →</div>
-  <table>
-    <tr><th>Exercice</th><th>Bloc 1</th><th>Bloc 2</th><th>Bloc 3</th></tr>
-    <tr><td>Back Pressure isométrique</td><td>3×20s <span class="number">20.3kg</span></td><td>3×25s <span class="number">22.5kg</span></td><td>3×30s <span class="number">25kg</span></td></tr>
-    <tr><td>Pronation partielle lente</td><td>3×10 <span class="number">11.3kg</span></td><td>3×8 <span class="number">12.5kg</span></td><td>3×6 <span class="number">13kg</span></td></tr>
-    <tr><td>Side Pressure</td><td>3×8 <span class="number">13.5kg</span></td><td>3×6 <span class="number">15kg</span></td><td>3×5 <span class="number">16kg</span></td></tr>
-    <tr><td>Curl marteau strict</td><td>3×8 <span class="number">18kg</span></td><td>3×6 <span class="number">20kg</span></td><td>3×5 <span class="number">22kg</span></td></tr>
-    <tr><td>Anti‑Idriss (hold)</td><td>2× max <span class="number">22.5kg</span></td><td>2× max <span class="number">25kg</span></td><td>2× max <span class="number">27.5kg</span></td></tr>
-  </table>
-  <p style="font-size:0.75rem;">Protection articulaire – jamais à l’échec.</p>
-
-  <!-- DIMANCHE -->
-  <h3>🧘 Dimanche – Repos / Récupération</h3>
-  <ul>
-    <li><strong>Bloc 1 :</strong> Marche 30' + mobilité.</li>
-    <li><strong>Bloc 2 :</strong> 1 dim./2 : test RSI (3 drop jumps 40 cm).</li>
-    <li><strong>Bloc 3 :</strong> Bain froid 10' + sommeil 9‑10h.</li>
-  </ul>
-</div>
-
-<!-- RÈGLES D'OR -->
-<div class="card">
-  <h2>🧠 Règles d’Auto‑Régulation</h2>
-  <div class="grid-2">
-    <div>
-      <h3>🛌 SNC obligatoire</h3>
-      <p style="font-size:0.8rem;">Chaque matin : 3 sauts + sommeil. Si ratio &lt; 85% ou sommeil &lt; 7h30 → séance haute intensité remplacée par mobilité.</p>
+    <!-- ─── EN-TÊTE SEMAINE ──────────────────────────────────── -->
+    <div id="week-header">
+      <div>
+        <div class="week-title-main" id="wh-title">SEMAINE 1</div>
+        <div class="week-subtitle" id="wh-subtitle">19 MAI – 25 MAI 2026 · CÂBLAGE NEUROMUSCULAIRE</div>
+      </div>
+      <div class="week-focus-badge" id="wh-focus">FOCUS : ACCÉLÉRATION & RÉACTIVITÉ</div>
     </div>
-    <div>
-      <h3>🥩 Nutrition</h3>
-      <p style="font-size:0.8rem;">Jours intenses : 5‑6 g/kg glucides, 2 g/kg protéines. Créatine 5g, whey, oméga‑3. Eau ≥ 2 L.</p>
-    </div>
-    <div>
-      <h3>⏱️ Repos strict</h3>
-      <p style="font-size:0.8rem;">Sprints Vmax : 6‑10 min de repos. Force : 3‑4 min. Jamais de sprint fatigué.</p>
-    </div>
-    <div>
-      <h3>🛡️ Règle des 3‑5%</h3>
-      <p style="font-size:0.8rem;">Si vitesse ou hauteur de saut chute de 3‑5% → arrêt immédiat de l’exercice.</p>
-    </div>
-  </div>
-  <div class="note" style="font-size:0.75rem;">
-    <strong>Ajustement automatique :</strong> RPE &lt; 7 deux semaines → +2.5%. RPE &gt; 9 → -5%.
-  </div>
-</div>
 
-<!-- PROJECTION TECHNIQUE -->
-<div class="card">
-  <h2>📈 Trajectoire Technique</h2>
-  <ul style="font-size:0.8rem;">
-    <li><strong>Sprint :</strong> Vmax &gt; 11.7 m/s, réaction &lt; 0.15s, squat 2× pdc (134 kg).</li>
-    <li><strong>Détente :</strong> RSI &gt; 2.5, drop jumps jusqu’à 80 cm.</li>
-    <li><strong>Bras de fer :</strong> back pressure suffisante, endurance match.</li>
-  </ul>
-</div>
+    <!-- ─── JOURS D'ENTRAÎNEMENT ────────────────────────────── -->
+    <div id="days-grid"></div>
 
-<div class="footer">
-  Programme définitif – Fusion Nadhir Elite + SUB 11 UP 50 – Généré le <span id="date"></span>
-</div>
+    <!-- ─── GRAPHIQUES ───────────────────────────────────────── -->
+    <div class="section-title chart" style="margin-top:32px;">ANALYTIQUE & PRÉDICTION</div>
+    <div id="charts-section">
+      <div class="chart-card">
+        <div class="chart-title">◈ COURBE PRÉDICTIVE CHRONO 100M (13.30 → 12.55s)</div>
+        <canvas id="chronoChart" class="chart-canvas" height="180"></canvas>
+      </div>
+      <div class="chart-card" style="border-color:rgba(0,245,255,0.3)">
+        <div class="chart-title" style="color:var(--gold)">◈ COMPLETION HEBDOMADAIRE (%)</div>
+        <canvas id="completionChart" class="chart-canvas" height="180"></canvas>
+      </div>
+    </div>
 
-<script>
-  document.getElementById('date').textContent = new Date().toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
-</script>
+    <!-- ─── SECTION ARM WRESTLING ────────────────────────────── -->
+    <div id="aw-section">
+      <div class="section-title">PROTOCOLE ARM WRESTLING SPÉCIFIQUE</div>
+      <div id="aw-days-grid"></div>
+    </div>
+
+    <!-- ─── COMMANDEMENTS SHADOW ─────────────────────────────── -->
+    <div id="commandements" class="fade-in">
+      <div class="section-title" style="border:none; margin-bottom:14px; padding-bottom:0;">
+        <span style="font-size:0.9rem">⚔</span> COMMANDEMENTS DU COACH SHADOW
+      </div>
+      <div class="cmd-grid">
+        <div class="cmd-item">
+          <span class="cmd-num">01</span>
+          <span class="cmd-text"><strong>SOMMEIL &lt; 7h30 → 0 SPRINT MAX.</strong> Aucune exception. Le SNC ne ment pas.</span>
+        </div>
+        <div class="cmd-item">
+          <span class="cmd-num">02</span>
+          <span class="cmd-text"><strong>CMJ &lt; 38cm → VOLUME −50%.</strong> La fatigue neuromusculaire est invisible mais mortelle pour la performance.</span>
+        </div>
+        <div class="cmd-item">
+          <span class="cmd-num">03</span>
+          <span class="cmd-text"><strong>BAISSE &gt; 4% → ARRÊT TOTAL.</strong> Mieux vaut perdre 1 séance que 2 semaines de récupération.</span>
+        </div>
+        <div class="cmd-item">
+          <span class="cmd-num">04</span>
+          <span class="cmd-text"><strong>ARM WRESTLING LE MARDI UNIQUEMENT.</strong> Court, intense, 100% brachioradial. Ne vole pas le SNC du sprint.</span>
+        </div>
+        <div class="cmd-item">
+          <span class="cmd-num">05</span>
+          <span class="cmd-text"><strong>ÉCHAUFFEMENT ≥ 20 MIN.</strong> Chaque séance de sprint sans échauffement complet est une blessure programmée.</span>
+        </div>
+        <div class="cmd-item">
+          <span class="cmd-num">06</span>
+          <span class="cmd-text"><strong>QUALITÉ &gt; QUANTITÉ.</strong> 4 répétitions parfaites valent 10 médiocres. Concentre-toi ou rentre chez toi.</span>
+        </div>
+        <div class="cmd-item">
+          <span class="cmd-num">07</span>
+          <span class="cmd-text"><strong>DIMANCHE = REPOS TOTAL.</strong> Pas de course, pas de musculation. Alimentation propre uniquement.</span>
+        </div>
+        <div class="cmd-item">
+          <span class="cmd-num">08</span>
+          <span class="cmd-text"><strong>HYDRATATION : 3L MINIMUM.</strong> La déshydratation tue la conductance nerveuse. Aucune excuse.</span>
+        </div>
+        <div class="cmd-item">
+          <span class="cmd-num">09</span>
+          <span class="cmd-text"><strong>RÉCUPÉRATION = ENTRAÎNEMENT.</strong> Le progrès se fait pendant le repos, pas pendant l'effort.</span>
+        </div>
+        <div class="cmd-item">
+          <span class="cmd-num">10</span>
+          <span class="cmd-text"><strong>TU EXÉCUTES. TU NE DISCUTES PAS.</strong> 74 jours. Un objectif. Zéro compromis.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── FOOTER ───────────────────────────────────────────── -->
+    <footer id="main-footer">
+      <div class="footer-text">OVERDRIVE MAX-V // SHADOW ASSASSIN CORE v2.0 — TOUS LES DROITS RÉSERVÉS</div>
+      <div class="footer-signature">COACH SHADOW — L'ÉLITE N'A PAS DE COMPROMIS</div>
+    </footer>
+
+  </div><!-- /app -->
+
+  <!-- RESET BUTTON -->
+  <button id="reset-btn" onclick="resetAll()">↺ RESET DATA</button>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       JAVASCRIPT — LOGIQUE COMPLÈTE
+  ════════════════════════════════════════════════════════════ -->
+  <script>
+    'use strict';
+
+    /* ════════════════════════════════════════════════════════════
+       CONSTANTES & CONFIG
+    ════════════════════════════════════════════════════════════ */
+    const COMPETITION_DATE = new Date('2026-08-01T10:00:00');
+    const BASE_CHRONO      = 13.30;  // Chrono de départ (secondes)
+    const TARGET_CHRONO    = 12.55;  // Objectif min
+    const TARGET_CHRONO_HI = 12.65;  // Objectif max
+    const TOTAL_WEEKS      = 11;
+    const START_DATE       = new Date('2026-05-19T00:00:00'); // Mardi 19 mai 2026
+
+    /* ════════════════════════════════════════════════════════════
+       DONNÉES DU PROGRAMME COMPLET — 11 SEMAINES
+       Structure : semaine → jours → phases → exercices
+    ════════════════════════════════════════════════════════════ */
+    const PROGRAMME = {
+
+      /* ─── BLOC 1 : CÂBLAGE NEUROMUSCULAIRE (S1-S3) ────────── */
+      1: {
+        bloc: 1,
+        titre: 'SEMAINE 1',
+        focus: 'CÂBLAGE NEUROMUSCULAIRE · PHASE D\'ACTIVATION',
+        dates: '19 MAI – 25 MAI 2026',
+        jours: [
+          {
+            nom: 'LUNDI',
+            type: 'Vitesse Maximale Absolue',
+            tag: 'vitesse',
+            phases: [
+              {
+                titre: 'ÉCHAUFFEMENT', couleur: 'cyan',
+                exercices: [
+                  { id:'s1l-e1', nom:'Footing léger progressif', series:'1', reps:'10 min', recup:'—', note:'FC montée douce, jamais essoufflé' },
+                  { id:'s1l-e2', nom:'Mobilisation articulaire (chevilles, hanches, épaules)', series:'1', reps:'5 min', recup:'—', note:'Cercles complets, amplitude maximale' },
+                  { id:'s1l-e3', nom:'Éducatifs course : talons-fesses, genoux hauts, skipping', series:'2', reps:'20m chaque', recup:'30s', note:'Focus technique, jamais en force' },
+                  { id:'s1l-e4', nom:'Accélérations progressives 40m', series:'3', reps:'40m', recup:'90s', note:'60% → 75% → 90% intensité' },
+                ]
+              },
+              {
+                titre: 'BLOC PRINCIPAL', couleur: '',
+                exercices: [
+                  { id:'s1l-m1', nom:'Sprint départ arrêté 20m', series:'6', reps:'20m', recup:'3min', note:'FOCUS : push angle 45°, triple extension complète' },
+                  { id:'s1l-m2', nom:'Sprint lancé 30m (élan 20m)', series:'4', reps:'30m', recup:'4min', note:'95-100% VMax — fréquence pas prioritaire' },
+                  { id:'s1l-m3', nom:'Montées escaliers explosives (2 marches)', series:'4', reps:'8 contacts', recup:'2min30', note:'Contact sol minimal, explosivité verticale' },
+                ]
+              },
+              {
+                titre: 'COOL-DOWN', couleur: 'gold',
+                exercices: [
+                  { id:'s1l-c1', nom:'Footing très léger', series:'1', reps:'5 min', recup:'—', note:'FC < 120 bpm' },
+                  { id:'s1l-c2', nom:'Étirements statiques membres inférieurs', series:'1', reps:'10 min', recup:'—', note:'Ischios, psoas, mollets — 30s par position' },
+                ]
+              }
+            ]
+          },
+          {
+            nom: 'MARDI',
+            type: 'Arm Wrestling Spécifique',
+            tag: 'aw',
+            phases: [
+              {
+                titre: 'ÉCHAUFFEMENT AW', couleur: 'cyan',
+                exercices: [
+                  { id:'s1m-e1', nom:'Rotation poignets & avant-bras', series:'2', reps:'60s', recup:'30s', note:'Sens horaire & anti-horaire' },
+                  { id:'s1m-e2', nom:'Prises légères tablette — montée en charge', series:'2', reps:'5', recup:'60s', note:'50% max — activer les tendons' },
+                ]
+              },
+              {
+                titre: 'BLOC PRINCIPAL AW', couleur: '',
+                exercices: [
+                  { id:'s1m-m1', nom:'Top-roll mouvement — câble poignet en pronation', series:'4', reps:'8', recup:'90s', note:'Contrôle excentrique 3s — force du début de mouvement' },
+                  { id:'s1m-m2', nom:'Presse tablette isométrie 90° (position de combat)', series:'4', reps:'6s hold', recup:'2min', note:'100% tension — coude ancré au corps' },
+                  { id:'s1m-m3', nom:'Curl poignet supination chargé', series:'3', reps:'12', recup:'75s', note:'Amplitude complète — aucun balancement' },
+                  { id:'s1m-m4', nom:'Planche de faiblesse (side pressure)', series:'3', reps:'10', recup:'90s', note:'Travail unilatéral bras dominant' },
+                ]
+              },
+              {
+                titre: 'GAINAGE COMPLÉMENTAIRE', couleur: 'gold',
+                exercices: [
+                  { id:'s1m-c1', nom:'Dead-hang pronation', series:'3', reps:'20s', recup:'60s', note:'Grip renforcé — doigts complets' },
+                  { id:'s1m-c2', nom:'Planche abdominale standard', series:'3', reps:'45s', recup:'45s', note:'Transmission de force tronc-épaule' },
+                ]
+              }
+            ]
+          },
+          {
+            nom: 'MERCREDI',
+            type: 'Récupération Active + Mobilité + Technique',
+            tag: 'recup',
+            phases: [
+              {
+                titre: 'RÉCUPÉRATION ACTIVE', couleur: 'cyan',
+                exercices: [
+                  { id:'s1me-r1', nom:'Natation ou vélo léger', series:'1', reps:'25 min', recup:'—', note:'FC ≤ 130 bpm — jamais en effort' },
+                  { id:'s1me-r2', nom:'Foam roller complet (ischios, IT-band, mollets, dos)', series:'1', reps:'15 min', recup:'—', note:'2 min par groupe musculaire, pression ferme' },
+                ]
+              },
+              {
+                titre: 'TECHNIQUE COURSE', couleur: '',
+                exercices: [
+                  { id:'s1me-t1', nom:'Drills de fréquence sur place (A-skips rapides)', series:'4', reps:'10s', recup:'45s', note:'FOCUS : hanche haute, bras dynamiques, contact sol réactif' },
+                  { id:'s1me-t2', nom:'Foulées bondissantes (triple extension)', series:'4', reps:'30m', recup:'90s', note:'Long, haut, puissant — sentir la propulsion' },
+                  { id:'s1me-t3', nom:'Technique départ blocks (sans chrono)', series:'6', reps:'10m', recup:'2min', note:'Régler angle dos, position des mains, signal de départ' },
+                ]
+              },
+              {
+                titre: 'MOBILITÉ & PRÉVENTION', couleur: 'gold',
+                exercices: [
+                  { id:'s1me-m1', nom:'Étirements dynamiques hip-flexors & quadriceps', series:'2', reps:'10 chaque', recup:'—', note:'Mouvements fluides — pas de rebond violent' },
+                  { id:'s1me-m2', nom:'Activation fessiers — clamshell, pont glute', series:'2', reps:'15 chaque', recup:'30s', note:'Essentiel pour la stabilité hanche en sprint' },
+                  { id:'s1me-m3', nom:'Travail proprioception cheville (plateau instable)', series:'2', reps:'45s', recup:'30s', note:'Yeux fermés — prévention entorse' },
+                ]
+              }
+            ]
+          },
+          {
+            nom: 'JEUDI',
+            type: 'Accélération + Force Explosive Bas du Corps',
+            tag: 'force',
+            phases: [
+              {
+                titre: 'ÉCHAUFFEMENT', couleur: 'cyan',
+                exercices: [
+                  { id:'s1j-e1', nom:'Footing progressif 8 min + mobilité dynamique', series:'1', reps:'8 min', recup:'—', note:'Amplitude croissante' },
+                  { id:'s1j-e2', nom:'Sauts box jump (basse hauteur) — activation nerveuse', series:'3', reps:'5', recup:'60s', note:'Atterrissage souple — jamais en rigidité' },
+                ]
+              },
+              {
+                titre: 'FORCE EXPLOSIVE', couleur: '',
+                exercices: [
+                  { id:'s1j-m1', nom:'Squat arrière lourd (85% 1RM)', series:'4', reps:'4', recup:'3min30', note:'Tempo : descente 3s / montée explosive' },
+                  { id:'s1j-m2', nom:'Fentes bulgares avec haltères', series:'3', reps:'8 chaque', recup:'2min', note:'Genou avant → cheville — gainage tronc actif' },
+                  { id:'s1j-m3', nom:'Soulevé de terre roumain (RDL)', series:'3', reps:'8', recup:'2min', note:'Ischios chargés — dos neutral OBLIGATOIRE' },
+                  { id:'s1j-m4', nom:'Calf raises unilatéraux lestés', series:'3', reps:'15', recup:'75s', note:'Amplitude max — propulsion mollet sprint' },
+                ]
+              },
+              {
+                titre: 'PLIOMÉTRIE DÉPART', couleur: 'gold',
+                exercices: [
+                  { id:'s1j-p1', nom:'Broad jumps (saut horizontal maximal)', series:'4', reps:'5', recup:'90s', note:'Bras propulseurs — distance maximale' },
+                  { id:'s1j-p2', nom:'Sprint 30m départ accroupi', series:'4', reps:'30m', recup:'3min', note:'Simule départ blocks — explosivité pure' },
+                ]
+              }
+            ]
+          },
+          {
+            nom: 'VENDREDI',
+            type: 'Repos ou Technique Légère',
+            tag: 'repos',
+            repos: true,
+            repos_msg: 'REPOS ACTIF OPTIONNEL',
+            repos_detail: 'Marche 20-30 min, étirements légers. Aucun effort intense. Prépare le samedi.',
+            phases: []
+          },
+          {
+            nom: 'SAMEDI',
+            type: 'Résistance Vitesse + Contrôle',
+            tag: 'vitesse',
+            phases: [
+              {
+                titre: 'ÉCHAUFFEMENT COMPLET', couleur: 'cyan',
+                exercices: [
+                  { id:'s1s-e1', nom:'Footing 10 min + éducatifs sprint', series:'1', reps:'10 min', recup:'—', note:'Progressif — température musculaire critique' },
+                  { id:'s1s-e2', nom:'Accélérations 50m (3 répétitions montantes)', series:'3', reps:'50m', recup:'2min', note:'60% / 80% / 90%' },
+                ]
+              },
+              {
+                titre: 'RÉSISTANCE VITESSE', couleur: '',
+                exercices: [
+                  { id:'s1s-m1', nom:'Sprint 60m résistance légère (parachute ou côte 2%)', series:'4', reps:'60m', recup:'5min', note:'Maintenir mécanique parfaite sous contrainte' },
+                  { id:'s1s-m2', nom:'Sprint 80m à 90-95% VMax', series:'3', reps:'80m', recup:'6min', note:'Chute de vitesse contrôlée — pas de lutte' },
+                  { id:'s1s-m3', nom:'Sprint 50m plat — chrono de contrôle', series:'2', reps:'50m', recup:'6min', note:'Note le chrono — référence bloc 1' },
+                ]
+              }
+            ]
+          },
+          {
+            nom: 'DIMANCHE',
+            type: 'Repos Total',
+            tag: 'repos',
+            repos: true,
+            repos_msg: 'REPOS TOTAL OBLIGATOIRE',
+            repos_detail: 'Aucune activité physique intense. Alimentation propre. Hydratation. Visualisation mentale de la course.',
+            phases: []
+          }
+        ]
+      },
+
+      2: {
+        bloc: 1,
+        titre: 'SEMAINE 2',
+        focus: 'CÂBLAGE + PUISSANCE DE DÉPART',
+        dates: '26 MAI – 1 JUIN 2026',
+        jours: [
+          {
+            nom: 'LUNDI',
+            type: 'Vitesse Maximale Absolue',
+            tag: 'vitesse',
+            phases: [
+              {
+                titre: 'ÉCHAUFFEMENT', couleur: 'cyan',
+                exercices: [
+                  { id:'s2l-e1', nom:'Footing progressif 12 min', series:'1', reps:'12 min', recup:'—', note:'Montée graduelle FC' },
+                  { id:'s2l-e2', nom:'Éducatifs complets (A, B, C skips + carioca)', series:'2', reps:'20m chaque', recup:'30s', note:'Précision > vitesse' },
+                  { id:'s2l-e3', nom:'4 accélérations progressives 50m', series:'4', reps:'50m', recup:'90s', note:'60-70-80-90%' },
+                ]
+              },
+              {
+                titre: 'BLOC PRINCIPAL — CHARGE +5%', couleur: '',
+                exercices: [
+                  { id:'s2l-m1', nom:'Sprint départ arrêté 20m (volume +2 reps)', series:'6', reps:'20m', recup:'3min', note:'Comparaison S1 — chercher amélioration départ' },
+                  { id:'s2l-m2', nom:'Sprint lancé 40m (élan 20m)', series:'5', reps:'40m', recup:'4min', note:'Extension distance S2' },
+                  { id:'s2l-m3', nom:'Sprint 60m plat à 100%', series:'3', reps:'60m', recup:'5min', note:'Chrono de référence S2' },
+                ]
+              },
+              {
+                titre: 'COOL-DOWN', couleur: 'gold',
+                exercices: [
+                  { id:'s2l-c1', nom:'Footing dégressif + étirements complets', series:'1', reps:'12 min', recup:'—', note:'Priorité ischios et fléchisseurs hanche' },
+                ]
+              }
+            ]
+          },
+          {
+            nom: 'MARDI',
+            type: 'Arm Wrestling Spécifique',
+            tag: 'aw',
+            phases: [
+              {
+                titre: 'ÉCHAUFFEMENT AW', couleur: 'cyan',
+                exercices: [
+                  { id:'s2m-e1', nom:'Massage avant-bras + rotation poignets', series:'1', reps:'5 min', recup:'—', note:'Cibler les extenseurs' },
+                ]
+              },
+              {
+                titre: 'BLOC PRINCIPAL AW — PROGRESSION +10%', couleur: '',
+                exercices: [
+                  { id:'s2m-m1', nom:'Top-roll câble chargé +10%', series:'4', reps:'8', recup:'90s', note:'Amplitude contrôlée — no ego lifting' },
+                  { id:'s2m-m2', nom:'Isométrie tablette à 90° — durée +2s', series:'4', reps:'8s hold', recup:'2min', note:'Respiration contrôlée pendant l\'effort' },
+                  { id:'s2m-m3', nom:'Curl inversé supination-pronation', series:'3', reps:'12', recup:'75s', note:'Force de la rotation d\'avant-bras' },
+                  { id:'s2m-m4', nom:'Wrist roller chargé (montée-descente)', series:'3', reps:'3 allers-retours', recup:'90s', note:'Endurance musculaire poignet' },
+                ]
+              },
+              {
+                titre: 'RENFORCEMENT ÉPAULE & STABILISATION', couleur: 'gold',
+                exercices: [
+                  { id:'s2m-c1', nom:'Élévation latérale haltère léger + rotation externe', series:'3', reps:'15', recup:'60s', note:'Prévention coiffe des rotateurs' },
+                  { id:'s2m-c2', nom:'Farmer walk grip lourd (30m)', series:'3', reps:'30m', recup:'90s', note:'Grip d\'acier — colonne neutre' },
+                ]
+              }
+            ]
+          },
+          {
+            nom: 'MERCREDI',
+            type: 'Récupération Active + Mobilité',
+            tag: 'recup',
+            phases: [
+              {
+                titre: 'RÉCUPÉRATION', couleur: 'cyan',
+                exercices: [
+                  { id:'s2me-r1', nom:'Vélo stationnaire ou natation douce 30 min', series:'1', reps:'30 min', recup:'—', note:'FC stable ≤ 130 bpm' },
+                  { id:'s2me-r2', nom:'Foam roller + massage balle tennis (pieds, mollets)', series:'1', reps:'15 min', recup:'—', note:'Insister sur tensions résiduelles' },
+                ]
+              },
+              {
+                titre: 'TECHNIQUE SPRINT', couleur: '',
+                exercices: [
+                  { id:'s2me-t1', nom:'Drills rythmiques sur haies basses (pas de côté)', series:'4', reps:'20m', recup:'45s', note:'Coordination pied-sol' },
+                  { id:'s2me-t2', nom:'Foulées bondissantes alternées', series:'4', reps:'40m', recup:'90s', note:'Bras actifs — poussée totale à chaque foulée' },
+                  { id:'s2me-t3', nom:'Course en côte légère (3-5%) technique', series:'4', reps:'30m', recup:'2min', note:'Posture sprint — ne pas pencher excessivement' },
+                ]
+              },
+              {
+                titre: 'GAINAGE & PRÉVENTION', couleur: 'gold',
+                exercices: [
+                  { id:'s2me-m1', nom:'Planche latérale + rotation hanche (star plank)', series:'3', reps:'30s chaque', recup:'30s', note:'Gainage oblique — transmission force sprint' },
+                  { id:'s2me-m2', nom:'Bird dog lent 3s par position', series:'3', reps:'10 chaque', recup:'30s', note:'Stabilisation lombo-pelvienne' },
+                ]
+              }
+            ]
+          },
+          {
+            nom: 'JEUDI',
+            type: 'Accélération + Force Explosive',
+            tag: 'force',
+            phases: [
+              {
+                titre: 'ACTIVATION', couleur: 'cyan',
+                exercices: [
+                  { id:'s2j-e1', nom:'Footing 8 min + box jumps activation', series:'3', reps:'5', recup:'60s', note:'Hauteur modérée — réactivité' },
+                ]
+              },
+              {
+                titre: 'FORCE EXPLOSIVE — CHARGE +5%', couleur: '',
+                exercices: [
+                  { id:'s2j-m1', nom:'Squat arrière (87% 1RM)', series:'5', reps:'3', recup:'3min30', note:'Explosivité concentrique absolue' },
+                  { id:'s2j-m2', nom:'Hip thrust (pont fessier) chargé lourd', series:'4', reps:'8', recup:'2min', note:'Extension hanche complète — clé du sprint' },
+                  { id:'s2j-m3', nom:'Step-up explosif sur box avec haltères', series:'3', reps:'8 chaque', recup:'2min', note:'Genoux alignés — puissance unilatérale' },
+                  { id:'s2j-m4', nom:'Presse à jambes 45° (surcharge ischio)', series:'3', reps:'10', recup:'2min', note:'Accent sur poussée finale mollet' },
+                ]
+              },
+              {
+                titre: 'PLIOMÉTRIE +', couleur: 'gold',
+                exercices: [
+                  { id:'s2j-p1', nom:'Depth jump depuis 40cm (réactivité sol)', series:'4', reps:'6', recup:'2min', note:'Temps de contact sol MINIMAL — rebondir vite' },
+                  { id:'s2j-p2', nom:'Sprint 30m après depth jump (enchaîné)', series:'3', reps:'30m', recup:'3min30', note:'Lien pliométrie-sprint — activation neuromusculaire maximale' },
+                ]
+              }
+            ]
+          },
+          {
+            nom: 'VENDREDI',
+            type: 'Repos Actif Optionnel',
+            tag: 'repos',
+            repos: true,
+            repos_msg: 'REPOS ACTIF OPTIONNEL',
+            repos_detail: 'Marche légère, étirements, visualisation. Si les jambes sont très lourdes → repos total.',
+            phases: []
+          },
+          {
+            nom: 'SAMEDI',
+            type: 'Test Vitesse + Résistance',
+            tag: 'test',
+            phases: [
+              {
+                titre: 'ÉCHAUFFEMENT COMPÉTITION', couleur: 'cyan',
+                exercices: [
+                  { id:'s2s-e1', nom:'Protocole échauffement complet 20 min', series:'1', reps:'20 min', recup:'—', note:'IDENTIQUE le jour de compét — créer la routine' },
+                ]
+              },
+              {
+                titre: 'TEST CHRONO S2', couleur: '',
+                exercices: [
+                  { id:'s2s-m1', nom:'Sprint 60m CHRONO (test)', series:'1', reps:'60m', recup:'10min', note:'⚡ NOTE LE TEMPS — référence semaine 2' },
+                  { id:'s2s-m2', nom:'Sprint 100m (test non-maximal 95%)', series:'1', reps:'100m', recup:'15min', note:'Sensations — pas de risque à ce stade' },
+                  { id:'s2s-m3', nom:'Répétitions de 80m (4x80m) récupération longue', series:'4', reps:'80m', recup:'7min', note:'Maintenir mécanique même en fatigue' },
+                ]
+              }
+            ]
+          },
+          {
+            nom: 'DIMANCHE',
+            type: 'Repos Total',
+            tag: 'repos',
+            repos: true,
+            repos_msg: 'REPOS TOTAL — RECHARGEMENT SYSTEM',
+            repos_detail: 'Silence. Récupération. Nutrition optimale. Le programme exige ce repos.',
+            phases: []
+          }
+        ]
+      },
+
+      3: {
+        bloc: 1,
+        titre: 'SEMAINE 3',
+        focus: 'CONSOLIDATION BLOC 1 — TENSION MAX',
+        dates: '2 JUIN – 8 JUIN 2026',
+        jours: [
+          {
+            nom: 'LUNDI',
+            type: 'Vitesse Maximale — Intensité Maximale',
+            tag: 'vitesse',
+            phases: [
+              {
+                titre: 'ÉCHAUFFEMENT INTENSIFIÉ', couleur: 'cyan',
+                exercices: [
+                  { id:'s3l-e1', nom:'Footing + éducatifs + accélérations courtes', series:'1', reps:'20 min', recup:'—', note:'Protocole complet — bien chaud avant le principal' },
+                ]
+              },
+              {
+                titre: 'VOLUME MAXIMAL BLOC 1', couleur: '',
+                exercices: [
+                  { id:'s3l-m1', nom:'Sprint 30m (blocks ou départ debout)', series:'8', reps:'30m', recup:'3min', note:'Toutes les reps à 100% — aucune fatigue accumulée' },
+                  { id:'s3l-m2', nom:'Sprint 60m 100%', series:'4', reps:'60m', recup:'5min', note:'Mécanique parfaite — CHRONO noté' },
+                  { id:'s3l-m3', nom:'Sprint 80m résistance légère', series:'3', reps:'80m', recup:'6min', note:'Dernier effort de la semaine vitesse' },
+                ]
+              },
+              {
+                titre: 'RÉCUPÉRATION POST-EFFORT', couleur: 'gold',
+                exercices: [
+                  { id:'s3l-c1', nom:'Marche active 10 min + étirements profonds 15 min', series:'1', reps:'25 min', recup:'—', note:'Ne pas s\'arrêter brutalement' },
+                ]
+              }
+            ]
+          },
+          {
+            nom: 'MARDI',
+            type: 'Arm Wrestling — Charge Maximale Bloc 1',
+            tag: 'aw',
+            phases: [
+              {
+                titre: 'ACTIVATION ARTICULAIRE', couleur: 'cyan',
+                exercices: [
+                  { id:'s3m-e1', nom:'Chaleur sur avant-bras + rotation active', series:'1', reps:'6 min', recup:'—', note:'Bande élastique légère en rotation' },
+                ]
+              },
+              {
+                titre: 'CHARGE MAXIMALE AW — SEMAINE 3', couleur: '',
+                exercices: [
+                  { id:'s3m-m1', nom:'Top-roll charge maximale bloc 1 (+15% vs S1)', series:'5', reps:'6', recup:'2min', note:'Contrôle total — surtout excentrique' },
+                  { id:'s3m-m2', nom:'Isométrie tablette 90° — 10s', series:'5', reps:'10s', recup:'2min30', note:'Position combat réelle — engagement maximal' },
+                  { id:'s3m-m3', nom:'Twist pronation lourde (haltère)', series:'4', reps:'8', recup:'90s', note:'Rotation d\'avant-bras complète — clé top-roll' },
+                  { id:'s3m-m4', nom:'Curl unilatéral supination lent', series:'3', reps:'10', recup:'75s', note:'4 secondes ascension / 4 secondes descente' },
+                  { id:'s3m-m5', nom:'Pince de force (capteur ou serviette)', series:'3', reps:'20s max', recup:'90s', note:'Tenue jusqu\'à rupture — endurance grip' },
+                ]
+              }
+            ]
+          },
+          {
+            nom: 'MERCREDI',
+            type: 'Récupération & Technique Affinée',
+            tag: 'recup',
+            phases: [
+              {
+                titre: 'RÉCUPÉRATION NEUROMUSCULAIRE', couleur: 'cyan',
+                exercices: [
+                  { id:'s3me-r1', nom:'Cryothérapie (bain froid 12-14°C) ou glace', series:'1', reps:'10-15 min', recup:'—', note:'Inflammation réduite — récupération accélérée' },
+                  { id:'s3me-r2', nom:'Massage auto-myofascial complet', series:'1', reps:'20 min', recup:'—', note:'IT-band, fessiers, psoas — points de tension S1-S2' },
+                ]
+              },
+              {
+                titre: 'PERFECTIONNEMENT TECHNIQUE', couleur: '',
+                exercices: [
+                  { id:'s3me-t1', nom:'Vidéo-analyse départ (si possible)', series:'1', reps:'—', recup:'—', note:'Filmer de profil — corriger angle corps & bras' },
+                  { id:'s3me-t2', nom:'Drills départ spécifiques (6 répétitions parfaites)', series:'6', reps:'15m', recup:'2min', note:'QUALITÉ ABSOLUE — répéter le mouvement parfait' },
+                  { id:'s3me-t3', nom:'Travail bras en course (miroir ou vidéo)', series:'3', reps:'30m', recup:'90s', note:'Bras à 90° — oscillation avant/arrière pure' },
+                ]
+              }
+            ]
+          },
+          {
+            nom: 'JEUDI',
+            type: 'Force Explosive + Pliométrie Max',
+            tag: 'force',
+            phases: [
+              {
+                titre: 'ACTIVATION NEUROMUSCULAIRE', couleur: 'cyan',
+                exercices: [
+                  { id:'s3j-e1', nom:'Sprint 20m + 3 box jumps (enchaîné, activation CNS)', series:'4', reps:'—', recup:'90s', note:'Prépare le système nerveux au maximal' },
+                ]
+              },
+              {
+                titre: 'FORCE EXPLOSIVE MAXIMALE BLOC 1', couleur: '',
+                exercices: [
+                  { id:'s3j-m1', nom:'Squat avant (front squat) — 80% 1RM', series:'4', reps:'4', recup:'3min', note:'Posture droite — quadriceps prioritaires' },
+                  { id:'s3j-m2', nom:'Power clean ou hang clean (barre)', series:'4', reps:'4', recup:'3min', note:'Explosivité pure — transmission force sol→épaule' },
+                  { id:'s3j-m3', nom:'Fentes sautées (plyometric lunges)', series:'4', reps:'8 chaque', recup:'2min', note:'Atterrissage stable — changement direction explosif' },
+                  { id:'s3j-m4', nom:'Sprints côte 6-8% (30m)', series:'5', reps:'30m', recup:'3min30', note:'Force propulsive maximale — bon pour départ' },
+                ]
+              },
+              {
+                titre: 'FIN DE BLOC 1 — ÉVALUATION', couleur: 'gold',
+                exercices: [
+                  { id:'s3j-p1', nom:'Test CMJ (saut vertical) — noter la hauteur', series:'3', reps:'1 saut max', recup:'2min', note:'Référence neuromusculaire fin bloc 1' },
+                  { id:'s3j-p2', nom:'Test triple hop (3 sauts consécutifs mesurés)', series:'2', reps:'3 sauts', recup:'2min', note:'Puissance élastique membres inférieurs' },
+                ]
+              }
+            ]
+          },
+          {
+            nom: 'VENDREDI',
+            type: 'Repos Total Obligatoire',
+            tag: 'repos',
+            repos: true,
+            repos_msg: 'REPOS TOTAL — FIN BLOC 1',
+            repos_detail: 'Fin du bloc 1. Le corps reconstruit maintenant. Alimentation hyperprotéinée. Sommeil 8h+.',
+            phases: []
+          },
+          {
+            nom: 'SAMEDI',
+            type: 'Test Chrono + Bilan Bloc 1',
+            tag: 'test',
+            phases: [
+              {
+                titre: 'ÉCHAUFFEMENT PROTOCOLE COMPÉTITION', couleur: 'cyan',
+                exercices: [
+                  { id:'s3s-e1', nom:'Protocole échauffement standard complet', series:'1', reps:'20 min', recup:'—', note:'Routine identique à chaque test et compét' },
+                ]
+              },
+              {
+                titre: 'BILAN BLOC 1 — TESTS CHRONO', couleur: '',
+                exercices: [
+                  { id:'s3s-m1', nom:'Sprint 60m CHRONO (référence fin bloc 1)', series:'1', reps:'60m', recup:'12min', note:'⚡ NOTE LE CHRONO — compare avec S1' },
+                  { id:'s3s-m2', nom:'Sprint 100m CHRONO (test fin bloc 1)', series:'1', reps:'100m', recup:'15min', note:'⚡ CHRONO 100m — objectif : sous 13.10s' },
+                ]
+              }
+            ]
+          },
+          {
+            nom: 'DIMANCHE',
+            type: 'Repos Total',
+            tag: 'repos',
+            repos: true,
+            repos_msg: 'REPOS & TRANSITION BLOC 2',
+            repos_detail: 'Visualisation du bloc 2. Planification nutrition. Récupération totale avant l\'intensification.',
+            phases: []
+          }
+        ]
+      },
+
+      /* ─── BLOC 2 : VITESSE SUPRA-MAXIMALE (S4-S7) ─────────── */
+      4: {
+        bloc: 2,
+        titre: 'SEMAINE 4',
+        focus: 'VITESSE SUPRA-MAXIMALE · ENTRÉE BLOC 2',
+        dates: '9 JUIN – 15 JUIN 2026',
+        jours: [
+          {
+            nom: 'LUNDI',
+            type: 'Vitesse Maximale + Supra-Maximale',
+            tag: 'vitesse',
+            phases: [
+              {
+                titre: 'ÉCHAUFFEMENT INTENSIFIÉ', couleur: 'cyan',
+                exercices: [
+                  { id:'s4l-e1', nom:'Footing 12 min + mobilité complète', series:'1', reps:'12 min', recup:'—', note:'Température musculaire critique pour supra-max' },
+                  { id:'s4l-e2', nom:'6 accélérations progressives 60m', series:'6', reps:'60m', recup:'90s', note:'70-80-85-90-95-100%' },
+                ]
+              },
+              {
+                titre: 'VITESSE SUPRA-MAXIMALE — DESCENTE DE CÔTE', couleur: '',
+                exercices: [
+                  { id:'s4l-m1', nom:'Sprint descendant 2-3% (30m) — supra-vitesse', series:'6', reps:'30m', recup:'4min', note:'⚡ DÉPASSER SA VMax — fréquence >100% habituel' },
+                  { id:'s4l-m2', nom:'Sprint plat immédiat après descente (enchaîné 30m)', series:'4', reps:'30m', recup:'4min', note:'Carry-over neuromusculaire — imprimer la vitesse' },
+                  { id:'s4l-m3', nom:'Sprint 60m 100% plat', series:'3', reps:'60m', recup:'6min', note:'Chrono de contrôle hebdomadaire' },
+                ]
+              }
+            ]
+          },
+          {
+            nom: 'MARDI',
+            type: 'Arm Wrestling — Bloc 2',
+            tag: 'aw',
+            phases: [
+              {
+                titre: 'MOBILISATION & ÉCHAUFFEMENT', couleur: 'cyan',
+                exercices: [
+                  { id:'s4m-e1', nom:'Rotation poignets, étirements extenseurs, chaleur', series:'1', reps:'7 min', recup:'—', note:'Plus long qu\'avant — intensité plus haute' },
+                ]
+              },
+              {
+                titre: 'PUISSANCE AW BLOC 2', couleur: '',
+                exercices: [
+                  { id:'s4m-m1', nom:'Top-roll explosif — accent sur début de mouvement', series:'5', reps:'5', recup:'2min', note:'Première impulsion = victoire en AW' },
+                  { id:'s4m-m2', nom:'Back pressure isométrie 75° (position défensive)', series:'4', reps:'8s', recup:'2min', note:'Angle critique en compétition' },
+                  { id:'s4m-m3', nom:'Hammer curl lourd (supination-neutre)', series:'4', reps:'8', recup:'90s', note:'Brachioradial — muscle clé AW' },
+                  { id:'s4m-m4', nom:'Traction pronation large (pull-up)', series:'3', reps:'8-10', recup:'2min', note:'Force dorsale — anchor en combat' },
+                  { id:'s4m-m5', nom:'Enroulements corde (rope wrist roll)', series:'3', reps:'5 allers-retours', recup:'2min', note:'Endurance spécifique poignet' },
+                ]
+              }
+            ]
+          },
+          {
+            nom: 'MERCREDI',
+            type: 'Récupération Neuromusculaire Active',
+            tag: 'recup',
+            phases: [
+              {
+                titre: 'RÉCUPÉRATION PROFONDE', couleur: 'cyan',
+                exercices: [
+                  { id:'s4me-r1', nom:'Natation dos crawl (décharge articulaire)', series:'1', reps:'30 min', recup:'—', note:'Eau chaude si dispo — muscles déchargés' },
+                  { id:'s4me-r2', nom:'Électrostimulation récupération (si dispo)', series:'1', reps:'20 min', recup:'—', note:'Sinon : bain chaud + étirements doux' },
+                ]
+              },
+              {
+                titre: 'TECHNIQUE VITESSE MAX', couleur: '',
+                exercices: [
+                  { id:'s4me-t1', nom:'Analyse vidéo course 60-80m — correction posture haute vitesse', series:'1', reps:'—', recup:'—', note:'Penche ≤ 5° en phase maximale' },
+                  { id:'s4me-t2', nom:'Drill cadence pieds sur ligne (tempo rapide)', series:'5', reps:'15s', recup:'45s', note:'Fréquence pure — pas de puissance' },
+                  { id:'s4me-t3', nom:'Foulées 80m (3/4 effort) technique pure', series:'3', reps:'80m', recup:'3min', note:'Sentir la mécanique à haute vitesse' },
+                ]
+              }
+            ]
+          },
+          {
+            nom: 'JEUDI',
+            type: 'Force Max + Pliométrie Bloc 2',
+            tag: 'force',
+            phases: [
+              {
+                titre: 'ACTIVATION CNS', couleur: 'cyan',
+                exercices: [
+                  { id:'s4j-e1', nom:'Warm-up + 3 max effort box jumps (40-50cm)', series:'3', reps:'1 saut max', recup:'90s', note:'Activation maximale avant charges lourdes' },
+                ]
+              },
+              {
+                titre: 'FORCE MAXIMALE — CHARGES NOUVELLES', couleur: '',
+                exercices: [
+                  { id:'s4j-m1', nom:'Squat arrière (90% 1RM)', series:'4', reps:'3', recup:'4min', note:'Explosivité absolue sur chaque rep — pas de lenteur' },
+                  { id:'s4j-m2', nom:'Power clean 3 répétitions lourd', series:'4', reps:'3', recup:'3min30', note:'Triple extension explosive — hanche, genou, cheville' },
+                  { id:'s4j-m3', nom:'Good morning (flexion hanche chargée)', series:'3', reps:'8', recup:'2min30', note:'Ischios et fessiers — prévention élastique arrière' },
+                  { id:'s4j-m4', nom:'Sautillement avec corde (rythme sprint)', series:'4', reps:'45s', recup:'60s', note:'Coordination neuromusculaire pied-sol' },
+                ]
+              },
+              {
+                titre: 'PLIOMÉTRIE AVANCÉE', couleur: 'gold',
+                exercices: [
+                  { id:'s4j-p1', nom:'Bounding (foulées géantes alternées 60m)', series:'4', reps:'60m', recup:'3min', note:'Distance maximale par foulée — puissance élastique' },
+                  { id:'s4j-p2', nom:'Hurdle hops (sauts haies 40cm) — 8 haies', series:'4', reps:'8 haies', recup:'2min30', note:'Rebond rapide — pas de pause entre haies' },
+                ]
+              }
+            ]
+          },
+          {
+            nom: 'VENDREDI',
+            type: 'Repos ou Technique Légère',
+            tag: 'repos',
+            repos: true,
+            repos_msg: 'REPOS ACTIF OPTIONNEL',
+            repos_detail: 'Technique très légère uniquement. Corps en reconstruction après intensité supra-maximale.',
+            phases: []
+          },
+          {
+            nom: 'SAMEDI',
+            type: 'Volume Vitesse + Résistance',
+            tag: 'vitesse',
+            phases: [
+              {
+                titre: 'ÉCHAUFFEMENT COMPLET', couleur: 'cyan',
+                exercices: [
+                  { id:'s4s-e1', nom:'Protocole standard + 5 accélérations 60m', series:'1', reps:'25 min', recup:'—', note:'Bien chaud pour volume élevé' },
+                ]
+              },
+              {
+                titre: 'VOLUME VITESSE', couleur: '',
+                exercices: [
+                  { id:'s4s-m1', nom:'5 × 60m (récup 5 min)', series:'5', reps:'60m', recup:'5min', note:'88-92% VMax — qualité > fatigue' },
+                  { id:'s4s-m2', nom:'3 × 80m (récup 6 min)', series:'3', reps:'80m', recup:'6min', note:'Tenir la vitesse jusqu\'à 80m' },
+                  { id:'s4s-m3', nom:'2 × 100m test (récup 10 min)', series:'2', reps:'100m', recup:'10min', note:'⚡ Chrono noté — cible < 13.00s' },
+                ]
+              }
+            ]
+          },
+          {
+            nom: 'DIMANCHE',
+            type: 'Repos Total',
+            tag: 'repos',
+            repos: true,
+            repos_msg: 'REPOS TOTAL OBLIGATOIRE',
+            repos_detail: 'Bloc 2 est intense. Ce repos est non-négociable. Prépare l\'adaptation.',
+            phases: []
+          }
+        ]
+      },
+
+      5: {
+        bloc: 2,
+        titre: 'SEMAINE 5',
+        focus: 'VITESSE MAX + ENDURANCE VITESSE',
+        dates: '16 JUIN – 22 JUIN 2026',
+        jours: [
+          {
+            nom: 'LUNDI',
+            type: 'Vitesse + Endurance Vitesse',
+            tag: 'vitesse',
+            phases: [
+              {
+                titre: 'ÉCHAUFFEMENT', couleur: 'cyan',
+                exercices: [
+                  { id:'s5l-e1', nom:'Protocole complet 22 min', series:'1', reps:'22 min', recup:'—', note:'Obligatoire — séance longue' },
+                ]
+              },
+              {
+                titre: 'ENDURANCE VITESSE', couleur: '',
+                exercices: [
+                  { id:'s5l-m1', nom:'Sprint 150m à 90%', series:'3', reps:'150m', recup:'8min', note:'Tenir la vitesse au-delà de 100m' },
+                  { id:'s5l-m2', nom:'Sprint 120m à 95%', series:'3', reps:'120m', recup:'7min', note:'Fade pas avant 100m — endurance vitesse' },
+                  { id:'s5l-m3', nom:'Sprint 60m 100% (fin séance)', series:'2', reps:'60m', recup:'8min', note:'Contrôle vitesse max même en fatigue' },
+                ]
+              }
+            ]
+          },
+          {
+            nom: 'MARDI',
+            type: 'Arm Wrestling — Force Combat',
+            tag: 'aw',
+            phases: [
+              {
+                titre: 'ÉCHAUFFEMENT AW', couleur: 'cyan',
+                exercices: [
+                  { id:'s5m-e1', nom:'Mobilisation complète bras + épaule', series:'1', reps:'8 min', recup:'—', note:'Chaleur profonde' },
+                ]
+              },
+              {
+                titre: 'SIMULATION COMBAT AW', couleur: '',
+                exercices: [
+                  { id:'s5m-m1', nom:'Entraînement à la table (partenaire ou simulation)', series:'6', reps:'8s effort max', recup:'2min30', note:'Position réelle — ancrage coude, attaque latérale' },
+                  { id:'s5m-m2', nom:'Curl pronation lourd (axe combat)', series:'4', reps:'6', recup:'2min', note:'Charge maximale — force d\'ouverture' },
+                  { id:'s5m-m3', nom:'Grip pincer (2 doigts puis 4 doigts)', series:'3', reps:'15s max', recup:'90s', note:'Variation prises — adaptabilité en combat' },
+                  { id:'s5m-m4', nom:'Planche de résistance latérale (bande élastique)', series:'4', reps:'12', recup:'90s', note:'Force dans l\'axe du combat — trajectoire top-roll' },
+                ]
+              }
+            ]
+          },
+          {
+            nom: 'MERCREDI',
+            type: 'Récupération & Affinement Technique',
+            tag: 'recup',
+            phases: [
+              {
+                titre: 'RÉCUPÉRATION ACTIVE', couleur: 'cyan',
+                exercices: [
+                  { id:'s5me-r1', nom:'Vélo 35 min + bain froid 10 min', series:'1', reps:'45 min', recup:'—', note:'Élimination des toxines — anti-inflammatoire naturel' },
+                ]
+              },
+              {
+                titre: 'TECHNIQUE PHASES 30-60m', couleur: '',
+                exercices: [
+                  { id:'s5me-t1', nom:'Travail transition accélération→vitesse max', series:'5', reps:'60m', recup:'3min', note:'Focus 20-50m : redressement, mécanique plateau' },
+                  { id:'s5me-t2', nom:'Drill relâchement musculaire à grande vitesse', series:'4', reps:'40m', recup:'2min', note:'Mâchoire relâchée, bras fluides, épaules basses' },
+                ]
+              }
+            ]
+          },
+          {
+            nom: 'JEUDI',
+            type: 'Force Explosive Maximale',
+            tag: 'force',
+            phases: [
+              {
+                titre: 'ACTIVATION', couleur: 'cyan',
+                exercices: [
+                  { id:'s5j-e1', nom:'CMJ test matinal + 4 sauts d\'activation (box 45cm)', series:'4', reps:'1', recup:'90s', note:'Vérifier état neuromusculaire' },
+                ]
+              },
+              {
+                titre: 'MAXIMUM STRENGTH', couleur: '',
+                exercices: [
+                  { id:'s5j-m1', nom:'Squat arrière 92% 1RM', series:'3', reps:'2', recup:'4min30', note:'Charges très lourdes — sécurité absolue' },
+                  { id:'s5j-m2', nom:'Deadlift conventionnel', series:'3', reps:'4', recup:'4min', note:'Chaîne postérieure complète' },
+                  { id:'s5j-m3', nom:'Fentes marchées lestées 20m', series:'3', reps:'20m', recup:'2min30', note:'Endurance musculaire fonctionnelle' },
+                  { id:'s5j-m4', nom:'Sauts en contrebas (drop jump 50cm)', series:'5', reps:'5', recup:'2min', note:'Force réactive maximale — stretch-shortening cycle' },
+                ]
+              }
+            ]
+          },
+          {
+            nom: 'VENDREDI',
+            type: 'Repos',
+            tag: 'repos',
+            repos: true,
+            repos_msg: 'REPOS COMPLET',
+            repos_detail: 'Semaine chargée. Corps en reconstruction. Manger. Dormir. Se recharger.',
+            phases: []
+          },
+          {
+            nom: 'SAMEDI',
+            type: 'Test Performance + 100m',
+            tag: 'test',
+            phases: [
+              {
+                titre: 'PROTOCOLE COMPÉTITION', couleur: 'cyan',
+                exercices: [
+                  { id:'s5s-e1', nom:'Échauffement compétition identique (20-25 min)', series:'1', reps:'25 min', recup:'—', note:'Ancrer la routine — automatiser' },
+                ]
+              },
+              {
+                titre: 'TEST 100M SEMAINE 5', couleur: '',
+                exercices: [
+                  { id:'s5s-m1', nom:'100m CHRONO S5 (cible : < 12.95s)', series:'1', reps:'100m', recup:'15min', note:'⚡ CHRONO — progression visible ici' },
+                  { id:'s5s-m2', nom:'60m CHRONO (référence intermédiaire)', series:'1', reps:'60m', recup:'10min', note:'⚡ Sous 7.5s = en bonne trajectoire' },
+                  { id:'s5s-m3', nom:'Récupération vitesse (4 × 80m à 85%)', series:'4', reps:'80m', recup:'5min', note:'Volume sans risque blessure' },
+                ]
+              }
+            ]
+          },
+          {
+            nom: 'DIMANCHE',
+            type: 'Repos Total',
+            tag: 'repos',
+            repos: true,
+            repos_msg: 'REPOS — RÉCUPÉRATION BLOCK 2',
+            repos_detail: 'Mi-bloc 2. Évaluation mentale de la progression. Repos absolu physique.',
+            phases: []
+          }
+        ]
+      },
+
+      6: {
+        bloc: 2,
+        titre: 'SEMAINE 6',
+        focus: 'PUISSANCE SUPRA-MAXIMALE + PLIOMÉTRIE AVANCÉE',
+        dates: '23 JUIN – 29 JUIN 2026',
+        jours: [
+          { nom:'LUNDI', type:'Vitesse Supra-Max + Phase Finale', tag:'vitesse',
+            phases:[
+              { titre:'ÉCHAUFFEMENT LONG', couleur:'cyan', exercices:[
+                { id:'s6l-e1', nom:'30 min échauffement complet + strides', series:'1', reps:'30 min', recup:'—', note:'Semaine intense — préparation maximale' }
+              ]},
+              { titre:'SUPRA-MAX + VOLUME', couleur:'', exercices:[
+                { id:'s6l-m1', nom:'Descente 2-3% sprint 40m × 6', series:'6', reps:'40m', recup:'4min', note:'Dépasser VMax — imprimer fréquence supra' },
+                { id:'s6l-m2', nom:'Sprint plat 40m après descente × 4', series:'4', reps:'40m', recup:'4min', note:'Transfert immédiat de la supra-vitesse' },
+                { id:'s6l-m3', nom:'100m progressif 95% (technique finale)', series:'2', reps:'100m', recup:'10min', note:'Travailler la fin de course — 80-100m' },
+              ]}
+            ]
+          },
+          { nom:'MARDI', type:'Arm Wrestling — Résistance & Explosivité', tag:'aw',
+            phases:[
+              { titre:'ÉCHAUFFEMENT AW', couleur:'cyan', exercices:[
+                { id:'s6m-e1', nom:'Mobilisation + chaleur + bandes légères', series:'1', reps:'8 min', recup:'—', note:'Avant-bras = fragilité — protéger' }
+              ]},
+              { titre:'EXPLOSIVITÉ AW', couleur:'', exercices:[
+                { id:'s6m-m1', nom:'Mouvement top-roll explosif avec relâchement', series:'5', reps:'5 explosifs', recup:'2min30', note:'Explosivité de l\'ouverture — première seconde decisive' },
+                { id:'s6m-m2', nom:'Isométrie press 3 angles (70°, 90°, 110°)', series:'3', reps:'6s par angle', recup:'90s entre angles', note:'Force positionnelle complète' },
+                { id:'s6m-m3', nom:'Traction neutrale prise large + rotation', series:'4', reps:'8', recup:'2min', note:'Dos + rotation — profil complet AW' },
+                { id:'s6m-m4', nom:'Extension tricep câble + supination', series:'3', reps:'12', recup:'75s', note:'Stabilisation en extension — défense' },
+              ]}
+            ]
+          },
+          { nom:'MERCREDI', type:'Récupération Profonde', tag:'recup',
+            phases:[
+              { titre:'DÉCHARGE NEUROMUSCULAIRE', couleur:'cyan', exercices:[
+                { id:'s6me-r1', nom:'Natation ou aquajog 30 min', series:'1', reps:'30 min', recup:'—', note:'Décharge articulaire + activation cardio douce' },
+                { id:'s6me-r2', nom:'Yoga sprint / mobilité profonde (video)', series:'1', reps:'25 min', recup:'—', note:'Souplesse hanche = efficacité foulée' },
+              ]},
+              { titre:'TECHNIQUE AVANCÉE', couleur:'', exercices:[
+                { id:'s6me-t1', nom:'Travail mental — visualisation course complète', series:'1', reps:'10 min', recup:'—', note:'Fermer les yeux — ressentir chaque foulée de 0 à 100m' },
+                { id:'s6me-t2', nom:'Technique basse vitesse avec résistance bande', series:'4', reps:'30m', recup:'90s', note:'Bande élastique derrière — gainage abdo actif' },
+              ]}
+            ]
+          },
+          { nom:'JEUDI', type:'Force Max + Pliométrie Complexe', tag:'force',
+            phases:[
+              { titre:'COMPLEXE FORCE-PLIOMÉTRIE', couleur:'cyan', exercices:[
+                { id:'s6j-e1', nom:'Activation : squat lourd 1 rep + box jump immédiat', series:'3', reps:'1+3', recup:'3min', note:'Post-activation potentiation (PAP) — méthode élite' }
+              ]},
+              { titre:'PLIOMÉTRIE AVANCÉE COMPLEXE', couleur:'', exercices:[
+                { id:'s6j-m1', nom:'Squat 90%+box jump (complexe PAP)', series:'4', reps:'2+5', recup:'4min', note:'Squat immédiatement suivi de 5 box jumps max' },
+                { id:'s6j-m2', nom:'Deadlift + broad jumps (complexe)', series:'3', reps:'3+5', recup:'4min', note:'Force → puissance dans la même série' },
+                { id:'s6j-m3', nom:'Plyometric push-up + dip explosif (haut du corps)', series:'3', reps:'8+8', recup:'2min', note:'Complémentaire AW — chaîne cinétique haute' },
+                { id:'s6j-m4', nom:'Single leg bounding 40m chaque jambe', series:'3', reps:'40m', recup:'2min30', note:'Asymétrie détectée → corriger maintenant' },
+              ]}
+            ]
+          },
+          { nom:'VENDREDI', type:'Repos Actif', tag:'repos',
+            repos:true, repos_msg:'REPOS ACTIF', repos_detail:'Semaine intense. Marche légère max. Corps en super-compensation.',
+            phases:[]
+          },
+          { nom:'SAMEDI', type:'Volume Vitesse — Séance Longue', tag:'vitesse',
+            phases:[
+              { titre:'PRÉPARATION SÉANCE LONGUE', couleur:'cyan', exercices:[
+                { id:'s6s-e1', nom:'Échauffement 30 min + strides', series:'1', reps:'30 min', recup:'—', note:'Séance longue — préparer soigneusement' }
+              ]},
+              { titre:'VOLUME VITESSE MAXIMAL', couleur:'', exercices:[
+                { id:'s6s-m1', nom:'6 × 60m (récup 5 min) à 90-95%', series:'6', reps:'60m', recup:'5min', note:'Qualité constante — arrêter si dégradation' },
+                { id:'s6s-m2', nom:'3 × 100m à 92% (récup 8 min)', series:'3', reps:'100m', recup:'8min', note:'Chrono de contrôle hebdomadaire' },
+                { id:'s6s-m3', nom:'1 × 150m à 88%', series:'1', reps:'150m', recup:'10min', note:'Endurance vitesse S6 — tenir la mécanique' },
+              ]}
+            ]
+          },
+          { nom:'DIMANCHE', type:'Repos Total', tag:'repos',
+            repos:true, repos_msg:'REPOS TOTAL OBLIGATOIRE', repos_detail:'Fin semaine 6 — corps en reconstruction maximale.',
+            phases:[]
+          }
+        ]
+      },
+
+      7: {
+        bloc: 2,
+        titre: 'SEMAINE 7',
+        focus: 'CONSOLIDATION BLOC 2 — TESTS MAXIMAUX',
+        dates: '30 JUIN – 6 JUILLET 2026',
+        jours: [
+          { nom:'LUNDI', type:'Vitesse Maximale — Pic Bloc 2', tag:'vitesse',
+            phases:[
+              { titre:'ÉCHAUFFEMENT OPTIMAL', couleur:'cyan', exercices:[
+                { id:'s7l-e1', nom:'Protocole complet 25 min — semaine de pic', series:'1', reps:'25 min', recup:'—', note:'Être totalement prêt avant le premier sprint' }
+              ]},
+              { titre:'VITESSE MAXIMALE — PIC BLOC 2', couleur:'', exercices:[
+                { id:'s7l-m1', nom:'Sprint 30m MAXIMAL × 6 (récup 4 min)', series:'6', reps:'30m', recup:'4min', note:'100% — chaque rep = course de vie' },
+                { id:'s7l-m2', nom:'Sprint 60m MAXIMAL × 4 (récup 6 min)', series:'4', reps:'60m', recup:'6min', note:'⚡ Chrono de pic bloc 2' },
+                { id:'s7l-m3', nom:'Sprint 80m MAXIMAL × 2 (récup 8 min)', series:'2', reps:'80m', recup:'8min', note:'Phase finale — résistance vitesse' },
+              ]}
+            ]
+          },
+          { nom:'MARDI', type:'Arm Wrestling — Charge Maximale Bloc 2', tag:'aw',
+            phases:[
+              { titre:'ÉCHAUFFEMENT PRÉCIS', couleur:'cyan', exercices:[
+                { id:'s7m-e1', nom:'Chaleur profonde avant-bras + montée progressive', series:'1', reps:'10 min', recup:'—', note:'Semaine pic AW — protection maximale' }
+              ]},
+              { titre:'MAXIMUM AW BLOC 2', couleur:'', exercices:[
+                { id:'s7m-m1', nom:'Top-roll charge PB (personal best tentative)', series:'3', reps:'4', recup:'3min', note:'Tester la limite actuelle — note le chargement' },
+                { id:'s7m-m2', nom:'Isométrie maximale 10s × 5 (full engagement)', series:'5', reps:'10s', recup:'2min30', note:'Niveau de force isométrique maximal' },
+                { id:'s7m-m3', nom:'Combat simulé 3 × 15s (résistance maximale)', series:'3', reps:'15s', recup:'3min', note:'Simulation combat réel — tout donner' },
+              ]}
+            ]
+          },
+          { nom:'MERCREDI', type:'Récupération Totale Active', tag:'recup',
+            phases:[
+              { titre:'RÉCUPÉRATION PROFONDE', couleur:'cyan', exercices:[
+                { id:'s7me-r1', nom:'Cryothérapie corps entier ou bain froid + chaud alternés', series:'1', reps:'20 min', recup:'—', note:'Contraste thermique — inflammation → 0' },
+                { id:'s7me-r2', nom:'Massage professionnel (si disponible) ou foam roller 20 min', series:'1', reps:'20 min', recup:'—', note:'Priorité fessiers, ischios, psoas' },
+              ]},
+              { titre:'PRÉPARATION TESTS CHRONO S7', couleur:'gold', exercices:[
+                { id:'s7me-t1', nom:'Répétitions mentales : visualiser le 100m parfait', series:'1', reps:'15 min', recup:'—', note:'Ressentir chaque phase — départ, accél, VMax, finir fort' },
+              ]}
+            ]
+          },
+          { nom:'JEUDI', type:'Force Explosive — Dernier Lourd Bloc 2', tag:'force',
+            phases:[
+              { titre:'COMPLEXE FINAL BLOC 2', couleur:'cyan', exercices:[
+                { id:'s7j-e1', nom:'PAP activation : squat 90% + sauts maximum', series:'2', reps:'2+5', recup:'3min', note:'Dernier gros travail de force' }
+              ]},
+              { titre:'FORCE FINALE BLOC 2', couleur:'', exercices:[
+                { id:'s7j-m1', nom:'Squat 92% × 2 reps × 3 séries', series:'3', reps:'2', recup:'4min', note:'Explosivité — dernier entraînement lourd' },
+                { id:'s7j-m2', nom:'Power clean 90% × 3 × 3', series:'3', reps:'3', recup:'3min30', note:'Triple extension — ancrer le mouvement' },
+                { id:'s7j-m3', nom:'Pliométrie légère (bounding, box jumps modérés)', series:'3', reps:'5 chaque', recup:'2min', note:'Maintenir réactivité sans fatigue' },
+              ]}
+            ]
+          },
+          { nom:'VENDREDI', type:'REPOS — Préparation Tests', tag:'repos',
+            repos:true, repos_msg:'REPOS OBLIGATOIRE — PRÉPARATION TESTS', repos_detail:'Bilan bloc 2 demain. Repos total. Alimentation riche en glucides. Hydratation maximale.',
+            phases:[]
+          },
+          { nom:'SAMEDI', type:'TESTS CHRONO — Bilan Bloc 2', tag:'test',
+            phases:[
+              { titre:'PROTOCOLE COMPÉTITION COMPLET', couleur:'cyan', exercices:[
+                { id:'s7s-e1', nom:'Échauffement IDENTIQUE compétition (25-30 min)', series:'1', reps:'28 min', recup:'—', note:'Routine définitive — l\'utiliser à chaque test' }
+              ]},
+              { titre:'BILAN BLOC 2 — TESTS CHRONO', couleur:'', exercices:[
+                { id:'s7s-m1', nom:'Sprint 60m CHRONO (pic bloc 2)', series:'1', reps:'60m', recup:'12min', note:'⚡ CHRONO — comparer avec S3' },
+                { id:'s7s-m2', nom:'Sprint 100m CHRONO OFFICIEL', series:'1', reps:'100m', recup:'15min', note:'⚡ CHRONO 100m — objectif < 12.90s' },
+                { id:'s7s-m3', nom:'Sprint 100m (2ème essai si conditions bonnes)', series:'1', reps:'100m', recup:'20min', note:'⚡ Prendre le meilleur des deux essais' },
+              ]}
+            ]
+          },
+          { nom:'DIMANCHE', type:'Repos Total — Transition Bloc 3', tag:'repos',
+            repos:true, repos_msg:'REPOS & TRANSITION BLOC 3', repos_detail:'2 semaines et demi de travail dur. Le corps est prêt pour l\'affûtage. Repos absolu.',
+            phases:[]
+          }
+        ]
+      },
+
+      /* ─── BLOC 3 : AFFÛTAGE & SURCOMPENSATION (S8-S10) ─────── */
+      8: {
+        bloc: 3,
+        titre: 'SEMAINE 8',
+        focus: 'AFFÛTAGE · RÉDUCTION VOLUME −30% · INTENSITÉ MAINTENUE',
+        dates: '7 JUILLET – 13 JUILLET 2026',
+        jours: [
+          { nom:'LUNDI', type:'Vitesse Qualité — Volume Réduit', tag:'vitesse',
+            phases:[
+              { titre:'ÉCHAUFFEMENT', couleur:'cyan', exercices:[
+                { id:'s8l-e1', nom:'Échauffement standard 22 min', series:'1', reps:'22 min', recup:'—', note:'Même qualité — volume sprint réduit' }
+              ]},
+              { titre:'VITESSE QUALITÉ — VOLUME −30%', couleur:'', exercices:[
+                { id:'s8l-m1', nom:'Sprint 30m 100% × 5 (récup 4 min)', series:'5', reps:'30m', recup:'4min', note:'Chaque sprint = bijou — aucune rep médiocre' },
+                { id:'s8l-m2', nom:'Sprint 60m 100% × 3 (récup 6 min)', series:'3', reps:'60m', recup:'6min', note:'Focus : mécanique parfaite 20-60m' },
+                { id:'s8l-m3', nom:'Sprint 100m 95% × 1 (récup 10 min)', series:'1', reps:'100m', recup:'10min', note:'Contrôle de la forme — ressentir' },
+              ]}
+            ]
+          },
+          { nom:'MARDI', type:'Arm Wrestling — Affûtage', tag:'aw',
+            phases:[
+              { titre:'MAINTIEN AW AFFÛTAGE', couleur:'gold', exercices:[
+                { id:'s8m-m1', nom:'Top-roll 80% charge × 4 × 6', series:'4', reps:'6', recup:'2min', note:'Maintenir sans chercher le PB — fatigue réduite' },
+                { id:'s8m-m2', nom:'Isométrie 90° × 3 × 8s', series:'3', reps:'8s', recup:'2min', note:'Entretien force isométrique' },
+                { id:'s8m-m3', nom:'Grip léger + étirements profonds avant-bras', series:'2', reps:'10 min', recup:'—', note:'Récupération tendineuse — affûtage' },
+              ]}
+            ]
+          },
+          { nom:'MERCREDI', type:'Récupération & Technique Fine', tag:'recup',
+            phases:[
+              { titre:'RÉCUPÉRATION ACTIVE', couleur:'cyan', exercices:[
+                { id:'s8me-r1', nom:'Natation 25 min + bain froid 8 min', series:'1', reps:'33 min', recup:'—', note:'Corps en super-compensation — l\'aider' }
+              ]},
+              { titre:'AFFINAGE TECHNIQUE', couleur:'', exercices:[
+                { id:'s8me-t1', nom:'Course 100m ralentie × 4 (analyse gestuelle)', series:'4', reps:'100m', recup:'3min', note:'60-70% — analyser CHAQUE phase du 100m' },
+                { id:'s8me-t2', nom:'Correction spécifique identifiée (bras/posture/fréquence)', series:'4', reps:'40m', recup:'2min', note:'Travailler LE défaut principal de ta course' },
+              ]}
+            ]
+          },
+          { nom:'JEUDI', type:'Force Légère + Pliométrie Entretien', tag:'force',
+            phases:[
+              { titre:'ENTRETIEN FORCE', couleur:'cyan', exercices:[
+                { id:'s8j-m1', nom:'Squat 80% × 3 × 4 (charges réduites)', series:'3', reps:'4', recup:'3min', note:'Maintenir la force sans créer de fatigue' },
+                { id:'s8j-m2', nom:'Hip thrust 75% × 3 × 8', series:'3', reps:'8', recup:'2min', note:'Fessiers actifs — sprint efficace' },
+                { id:'s8j-m3', nom:'Box jumps légers × 3 × 6', series:'3', reps:'6', recup:'90s', note:'Réactivité maintenue — explosivité' },
+              ]}
+            ]
+          },
+          { nom:'VENDREDI', type:'Repos', tag:'repos',
+            repos:true, repos_msg:'REPOS TOTAL', repos_detail:'Affûtage en cours. Moins = plus maintenant.',
+            phases:[]
+          },
+          { nom:'SAMEDI', type:'Qualité Vitesse + Test Intermédiaire', tag:'test',
+            phases:[
+              { titre:'PROTOCOLE COMPÉT', couleur:'cyan', exercices:[
+                { id:'s8s-e1', nom:'Échauffement compétition 25 min', series:'1', reps:'25 min', recup:'—', note:'Routine ancrée' }
+              ]},
+              { titre:'TEST S8', couleur:'', exercices:[
+                { id:'s8s-m1', nom:'Sprint 100m CHRONO (objectif < 12.75s)', series:'1', reps:'100m', recup:'15min', note:'⚡ CHRONO — on voit la progression' },
+                { id:'s8s-m2', nom:'Sprint 60m CHRONO', series:'1', reps:'60m', recup:'10min', note:'⚡ Référence 60m bloc 3' },
+              ]}
+            ]
+          },
+          { nom:'DIMANCHE', type:'Repos Total', tag:'repos',
+            repos:true, repos_msg:'REPOS TOTAL', repos_detail:'Semaine 8. Corps en super-compensation. Repos = performance.',
+            phases:[]
+          }
+        ]
+      },
+
+      9: {
+        bloc: 3,
+        titre: 'SEMAINE 9',
+        focus: 'SURCOMPENSATION · VOLUME −40% · INTENSITÉ MAX',
+        dates: '14 JUILLET – 20 JUILLET 2026',
+        jours: [
+          { nom:'LUNDI', type:'Vitesse Absolue — Ultra Qualité', tag:'vitesse',
+            phases:[
+              { titre:'ÉCHAUFFEMENT OPTIMAL', couleur:'cyan', exercices:[
+                { id:'s9l-e1', nom:'Échauffement long 28 min + activation CNS', series:'1', reps:'28 min', recup:'—', note:'Semaine de surcompensation — tout pour la qualité' }
+              ]},
+              { titre:'ULTRA QUALITÉ — CHAQUE RÉPÉTITION = OR', couleur:'', exercices:[
+                { id:'s9l-m1', nom:'Sprint 30m 100% × 4 (récup 5 min)', series:'4', reps:'30m', recup:'5min', note:'4 reps parfaites valent mieux que 8 ordinaires' },
+                { id:'s9l-m2', nom:'Sprint 60m 100% × 2 (récup 8 min)', series:'2', reps:'60m', recup:'8min', note:'⚡ 2 sprints de diamant' },
+                { id:'s9l-m3', nom:'Sprint 100m MAXIMAL × 1', series:'1', reps:'100m', recup:'15min', note:'⚡ Le sprint de la semaine — tout donner' },
+              ]}
+            ]
+          },
+          { nom:'MARDI', type:'Arm Wrestling — Pic de Forme', tag:'aw',
+            phases:[
+              { titre:'PIC AW', couleur:'gold', exercices:[
+                { id:'s9m-m1', nom:'Technique pure top-roll × 4 × 4 (poids modéré)', series:'4', reps:'4', recup:'2min', note:'Automatisme du geste — muscle mémoire' },
+                { id:'s9m-m2', nom:'Simulation combat × 4 × 10s', series:'4', reps:'10s', recup:'2min30', note:'Intensité combat réel — mental d\'assassin' },
+                { id:'s9m-m3', nom:'Grip tenu léger + étirements', series:'2', reps:'10 min', recup:'—', note:'Ne pas fatiguer les tendons avant compét' },
+              ]}
+            ]
+          },
+          { nom:'MERCREDI', type:'Récupération & Affinage Final', tag:'recup',
+            phases:[
+              { titre:'RÉCUPÉRATION COMPLÈTE', couleur:'cyan', exercices:[
+                { id:'s9me-r1', nom:'Cryo + massage + mobilité 40 min total', series:'1', reps:'40 min', recup:'—', note:'Nettoyage complet avant la dernière semaine de bloc' }
+              ]},
+              { titre:'SIMULATION COMPÉTITION MENTALE', couleur:'', exercices:[
+                { id:'s9me-t1', nom:'Visualisation course complète × 5 (15 min)', series:'1', reps:'15 min', recup:'—', note:'Chaque détail — échauffement, blocs, chaque foulée, ligne d\'arrivée' },
+                { id:'s9me-t2', nom:'Strides techniques × 6 (qualité absolue)', series:'6', reps:'80m', recup:'3min', note:'75-80% — ancrer la parfaite mécanique' },
+              ]}
+            ]
+          },
+          { nom:'JEUDI', type:'Force Entretien + Réactivité', tag:'force',
+            phases:[
+              { titre:'ENTRETIEN MINIMAL', couleur:'cyan', exercices:[
+                { id:'s9j-m1', nom:'Squat 75% × 2 × 4 (strict minimum)', series:'2', reps:'4', recup:'3min', note:'Maintenir sans fatiguer' },
+                { id:'s9j-m2', nom:'Box jumps × 3 × 5 (réactivité)', series:'3', reps:'5', recup:'90s', note:'Explosivité fraîche' },
+                { id:'s9j-m3', nom:'Sprint 20m × 4 (activation pure)', series:'4', reps:'20m', recup:'2min', note:'Système nerveux actif' },
+              ]}
+            ]
+          },
+          { nom:'VENDREDI', type:'Repos Total', tag:'repos',
+            repos:true, repos_msg:'REPOS TOTAL', repos_detail:'Ne rien faire. Le corps surcompense. Laisser la magie opérer.',
+            phases:[]
+          },
+          { nom:'SAMEDI', type:'TEST CHRONO — Bilan Bloc 3', tag:'test',
+            phases:[
+              { titre:'PROTOCOLE COMPÉT PARFAIT', couleur:'cyan', exercices:[
+                { id:'s9s-e1', nom:'Échauffement compétition identique 25-30 min', series:'1', reps:'28 min', recup:'—', note:'Même chose que le 1er août — ancrer la routine' }
+              ]},
+              { titre:'TESTS CHRONO — BILAN BLOC 3', couleur:'', exercices:[
+                { id:'s9s-m1', nom:'100m CHRONO OFFICIEL — cible < 12.65s', series:'1', reps:'100m', recup:'20min', note:'⚡ CHRONO — on est proche de l\'objectif' },
+                { id:'s9s-m2', nom:'2ème essai 100m si conditions optimales', series:'1', reps:'100m', recup:'20min', note:'⚡ Ne forcer que si les jambes sont fraîches' },
+              ]}
+            ]
+          },
+          { nom:'DIMANCHE', type:'Repos Total', tag:'repos',
+            repos:true, repos_msg:'REPOS — TRANSITION SEMAINE 10', repos_detail:'Plus que 2 semaines. Récupération absolue. Tu es en train de devenir meilleur.',
+            phases:[]
+          }
+        ]
+      },
+
+      10: {
+        bloc: 3,
+        titre: 'SEMAINE 10',
+        focus: 'AFFÛTAGE FINAL — VOLUME MINIMAL — VITESSE MAXIMALE',
+        dates: '21 JUILLET – 27 JUILLET 2026',
+        jours: [
+          { nom:'LUNDI', type:'Vitesse Pure — Volume Ultra-Réduit', tag:'vitesse',
+            phases:[
+              { titre:'ÉCHAUFFEMENT COMPÉTITION', couleur:'cyan', exercices:[
+                { id:'s10l-e1', nom:'Protocole compétition 28 min — DÉFINITIF', series:'1', reps:'28 min', recup:'—', note:'Graver dans la mémoire — identique le 1er août' }
+              ]},
+              { titre:'VITESSE ABSOLUE — 3 SPRINTS MAXIMUM', couleur:'', exercices:[
+                { id:'s10l-m1', nom:'Sprint 30m 100% × 3 (récup 5 min)', series:'3', reps:'30m', recup:'5min', note:'Chaque sprint = répétition générale' },
+                { id:'s10l-m2', nom:'Sprint 60m 100% × 2 (récup 8 min)', series:'2', reps:'60m', recup:'8min', note:'⚡ Sprints de référence finale' },
+              ]}
+            ]
+          },
+          { nom:'MARDI', type:'Arm Wrestling — Maintien', tag:'aw',
+            phases:[
+              { titre:'MAINTIEN AW FINAL', couleur:'gold', exercices:[
+                { id:'s10m-m1', nom:'Technique top-roll légère × 3 × 5', series:'3', reps:'5', recup:'2min', note:'Maintien — pas de fatigue' },
+                { id:'s10m-m2', nom:'Isométrie × 3 × 6s', series:'3', reps:'6s', recup:'90s', note:'Connexion neurale maintenue' },
+                { id:'s10m-m3', nom:'Étirements profonds avant-bras + massage', series:'1', reps:'10 min', recup:'—', note:'Tendons sains pour la compétition' },
+              ]}
+            ]
+          },
+          { nom:'MERCREDI', type:'Récupération & Visualisation', tag:'recup',
+            phases:[
+              { titre:'RÉCUPÉRATION & MENTAL', couleur:'cyan', exercices:[
+                { id:'s10me-r1', nom:'Natation détendue 20 min', series:'1', reps:'20 min', recup:'—', note:'Corps déchargé' },
+                { id:'s10me-r2', nom:'Visualisation compétition complète (3 fois)', series:'3', reps:'5 min chaque', recup:'2 min', note:'Départ, accélération, vitesse max, finir fort, franchir la ligne' },
+              ]}
+            ]
+          },
+          { nom:'JEUDI', type:'Activation Légère', tag:'recup',
+            phases:[
+              { titre:'ACTIVATION PRÉ-PEAKING', couleur:'cyan', exercices:[
+                { id:'s10j-m1', nom:'Footing léger 15 min', series:'1', reps:'15 min', recup:'—', note:'Maintenir la circulation' },
+                { id:'s10j-m2', nom:'Strides × 4 (70-80%)', series:'4', reps:'60m', recup:'3min', note:'Légèreté et fluidité — pas de force' },
+                { id:'s10j-m3', nom:'Box jumps légers × 2 × 5', series:'2', reps:'5', recup:'90s', note:'Réactivité maintenue' },
+              ]}
+            ]
+          },
+          { nom:'VENDREDI', type:'Repos', tag:'repos',
+            repos:true, repos_msg:'REPOS TOTAL — VEILLE PEAKING', repos_detail:'Ne rien faire. Demain commence le peaking ultime.',
+            phases:[]
+          },
+          { nom:'SAMEDI', type:'Dernier Test Chrono', tag:'test',
+            phases:[
+              { titre:'DERNIÈRE SIMULATION AVANT COMP', couleur:'cyan', exercices:[
+                { id:'s10s-e1', nom:'Protocole échauffement définitif (28 min)', series:'1', reps:'28 min', recup:'—', note:'Exactement comme le 1er août — ancrage total' }
+              ]},
+              { titre:'DERNIER TEST CHRONO', couleur:'', exercices:[
+                { id:'s10s-m1', nom:'100m CHRONO FINAL AVANT COMP (cible ≤ 12.65s)', series:'1', reps:'100m', recup:'—', note:'⚡ DERNIER CHRONO D\'ENTRAÎNEMENT' },
+              ]}
+            ]
+          },
+          { nom:'DIMANCHE', type:'Repos Total', tag:'repos',
+            repos:true, repos_msg:'REPOS — TRANSITION PEAKING ULTIME', repos_detail:'Une semaine. C\'est tout. Repos absolu.',
+            phases:[]
+          }
+        ]
+      },
+
+      /* ─── BLOC 4 : PEAKING ULTIME + COMPÉTITION (S11) ─────── */
+      11: {
+        bloc: 4,
+        titre: 'SEMAINE 11 — PEAKING ULTIME',
+        focus: '⚡ COMPÉTITION 1ER AOÛT — TOUT EST PRÊT',
+        dates: '28 JUILLET – 1ER AOÛT 2026',
+        jours: [
+          { nom: 'LUNDI 28 JUIL',
+            type: 'Activation Finale CNS',
+            tag: 'vitesse',
+            phases: [
+              { titre: 'ACTIVATION ÉLITE', couleur: 'cyan', exercices: [
+                { id:'s11l-e1', nom:'Footing 12 min léger', series:'1', reps:'12 min', recup:'—', note:'Fluidité, légèreté — sentir le corps frais' },
+                { id:'s11l-e2', nom:'Éducatifs course qualité (15 min)', series:'1', reps:'15 min', recup:'—', note:'Technique parfaite — aucune urgence' },
+              ]},
+              { titre:'ACTIVATION CNS FINALE', couleur:'', exercices:[
+                { id:'s11l-m1', nom:'Sprint 30m 100% × 3 (récup 5 min) — UNIQUEMENT', series:'3', reps:'30m', recup:'5min', note:'3 sprints PARFAITS. Stop.' },
+                { id:'s11l-m2', nom:'Sprint 60m × 1 à 95% (récup 8 min)', series:'1', reps:'60m', recup:'8min', note:'Sentir la mécanique fluide' },
+              ]}
+            ]
+          },
+          { nom: 'MARDI 29 JUIL',
+            type: 'Repos Actif Minimal',
+            tag: 'recup',
+            phases:[
+              { titre:'REPOS ACTIF STRICT', couleur:'cyan', exercices:[
+                { id:'s11m-r1', nom:'Marche légère 20 min', series:'1', reps:'20 min', recup:'—', note:'Circulation sanguine maintenue' },
+                { id:'s11m-r2', nom:'Étirements légers membres inférieurs (10 min)', series:'1', reps:'10 min', recup:'—', note:'Ne pas fatiguer — juste maintenir souplesse' },
+                { id:'s11m-r3', nom:'Routine AW légère × 2 × 3 (50% charge)', series:'2', reps:'3', recup:'2min', note:'Maintien connexion nerveuse AW — pas de fatigue' },
+              ]}
+            ]
+          },
+          { nom: 'MERCREDI 30 JUIL',
+            type: 'Activation Légère + Visualisation',
+            tag: 'recup',
+            phases:[
+              { titre:'PRÉPARATION MENTALE & PHYSIQUE', couleur:'cyan', exercices:[
+                { id:'s11me-r1', nom:'Footing très léger 10 min', series:'1', reps:'10 min', recup:'—', note:'Jambes fraîches — ne pas forcer' },
+                { id:'s11me-r2', nom:'Strides × 3 (70%)', series:'3', reps:'60m', recup:'3min', note:'Légèreté et vitesse ressentie' },
+                { id:'s11me-r3', nom:'Visualisation 100m × 5 répétitions', series:'5', reps:'5 min chaque', recup:'1 min', note:'⚡ Gagner dans sa tête d\'abord' },
+              ]}
+            ]
+          },
+          { nom: 'JEUDI 31 JUIL',
+            type: 'REPOS TOTAL — VEILLE COMPÉTITION',
+            tag: 'repos',
+            repos: true,
+            repos_msg: '⚡ REPOS TOTAL — VEILLE DE COMPÉTITION',
+            repos_detail: 'RIEN. ZÉRO EFFORT. Alimentation riche en glucides complexes. Hydratation 3L minimum. Dormir 9h. Se lever frais. Demain on gagne.',
+            phases: []
+          },
+          { nom: 'VENDREDI — COMPÉTITION',
+            type: '🏆 COMPÉTITION 1ER AOÛT 2026',
+            tag: 'test',
+            phases:[
+              { titre:'⚡ PROTOCOLE JOUR J', couleur:'gold', exercices:[
+                { id:'s11comp-e1', nom:'Réveil 3h30 avant course — repas léger glucides', series:'1', reps:'—', recup:'—', note:'Riz blanc + miel + banane — digestion complète' },
+                { id:'s11comp-e2', nom:'Arrivée piste 90 min avant course', series:'1', reps:'—', recup:'—', note:'Repérage, chaleur, routine mentale' },
+                { id:'s11comp-e3', nom:'PROTOCOLE ÉCHAUFFEMENT DÉFINITIF (28 min)', series:'1', reps:'28 min', recup:'—', note:'IDENTIQUE à toutes les simulations — automatique' },
+                { id:'s11comp-e4', nom:'3 sprints d\'activation 20-30m', series:'3', reps:'30m', recup:'3min', note:'80-90-95% — préparer le SNC' },
+                { id:'s11comp-e5', nom:'Strides 60m × 1 à 95%', series:'1', reps:'60m', recup:'5min', note:'Dernière mise en route avant les blocs' },
+                { id:'s11comp-m1', nom:'🏆 COURSE 100m — OBJECTIF 12.55-12.65s', series:'1', reps:'100m', recup:'VICTOIRE', note:'⚡ TOUT POUR CE MOMENT — TU ES PRÊT — EXÉCUTE' },
+              ]}
+            ]
+          }
+        ]
+      }
+
+    }; // fin PROGRAMME
+
+    /* ════════════════════════════════════════════════════════════
+       ÉTAT GLOBAL
+    ════════════════════════════════════════════════════════════ */
+    let currentBloc = 1;
+    let currentWeek = 1;
+
+    /* ════════════════════════════════════════════════════════════
+       LOCALSTORAGE — PERSISTANCE
+    ════════════════════════════════════════════════════════════ */
+    function saveExercise(id, done) {
+      const key = 'shadow_ex_' + id;
+      if (done) localStorage.setItem(key, '1');
+      else localStorage.removeItem(key);
+    }
+
+    function isExerciseDone(id) {
+      return localStorage.getItem('shadow_ex_' + id) === '1';
+    }
+
+    function resetAll() {
+      if (!confirm('⚠ RESET TOUTES LES DONNÉES — CONFIRMER ?')) return;
+      const keys = Object.keys(localStorage).filter(k => k.startsWith('shadow_'));
+      keys.forEach(k => localStorage.removeItem(k));
+      ['sleep-input','cmj-input'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.value = '';
+      });
+      renderWeek(currentWeek);
+      updateSecurityStatus();
+      updateGlobalProgress();
+      showToast('RESET EFFECTUÉ');
+    }
+
+    /* ════════════════════════════════════════════════════════════
+       COUNTDOWN DYNAMIQUE
+    ════════════════════════════════════════════════════════════ */
+    function updateCountdown() {
+      const now  = new Date();
+      const diff = COMPETITION_DATE - now;
+      if (diff <= 0) {
+        document.getElementById('cd-days').textContent  = '00';
+        document.getElementById('cd-hours').textContent = '00';
+        document.getElementById('cd-mins').textContent  = '00';
+        document.getElementById('cd-secs').textContent  = '00';
+        return;
+      }
+      const days  = Math.floor(diff / 86400000);
+      const hours = Math.floor((diff % 86400000) / 3600000);
+      const mins  = Math.floor((diff % 3600000)  / 60000);
+      const secs  = Math.floor((diff % 60000)    / 1000);
+      document.getElementById('cd-days').textContent  = String(days).padStart(2,'0');
+      document.getElementById('cd-hours').textContent = String(hours).padStart(2,'0');
+      document.getElementById('cd-mins').textContent  = String(mins).padStart(2,'0');
+      document.getElementById('cd-secs').textContent  = String(secs).padStart(2,'0');
+    }
+    setInterval(updateCountdown, 1000);
+    updateCountdown();
+
+    /* ════════════════════════════════════════════════════════════
+       INDICATEUR DE BLOC ACTIF (countdown + progression)
+    ════════════════════════════════════════════════════════════ */
+    function updateBlocIndicator() {
+      const now = new Date();
+      const totalMs = COMPETITION_DATE - START_DATE;
+      const elapsed = now - START_DATE;
+      const progress = Math.max(0, Math.min(1, elapsed / totalMs));
+      const weekNum = Math.ceil(progress * TOTAL_WEEKS);
+      // Bloc actuel selon semaine
+      let activeSeg = 1;
+      if (weekNum >= 1 && weekNum <= 3) activeSeg = 1;
+      else if (weekNum >= 4 && weekNum <= 7) activeSeg = 2;
+      else if (weekNum >= 8 && weekNum <= 10) activeSeg = 3;
+      else activeSeg = 4;
+
+      document.querySelectorAll('.bloc-seg').forEach((s, i) => {
+        s.className = 'bloc-seg';
+        if (i + 1 <= activeSeg) s.classList.add('active-b' + (i + 1));
+      });
+    }
+    updateBlocIndicator();
+
+    /* ════════════════════════════════════════════════════════════
+       PRÉDICTION CHRONO DYNAMIQUE
+    ════════════════════════════════════════════════════════════ */
+    function updateChronoPrediction() {
+      const now = new Date();
+      const totalMs = COMPETITION_DATE - START_DATE;
+      const elapsed = Math.max(0, now - START_DATE);
+      const progress = Math.min(1, elapsed / totalMs);
+      // Interpolation non-linéaire (courbe d'amélioration exponentielle)
+      const improvement = (BASE_CHRONO - TARGET_CHRONO) * Math.pow(progress, 0.65);
+      const predicted = BASE_CHRONO - improvement;
+      const pctDisplay = Math.round(progress * 100);
+
+      document.getElementById('chrono-pred').textContent = predicted.toFixed(2) + 's';
+      document.getElementById('chrono-progress').style.width = (pctDisplay) + '%';
+      document.getElementById('global-pct').textContent = pctDisplay + '%';
+      document.getElementById('global-progress-fill').style.width = pctDisplay + '%';
+    }
+    updateChronoPrediction();
+    setInterval(updateChronoPrediction, 60000);
+
+    /* ════════════════════════════════════════════════════════════
+       MONITORING SÉCURITÉ
+    ════════════════════════════════════════════════════════════ */
+    function updateSecurityStatus() {
+      const sleepVal = parseFloat(document.getElementById('sleep-input').value);
+      const cmjVal   = parseFloat(document.getElementById('cmj-input').value);
+      const sleepStatus = document.getElementById('sleep-status');
+      const cmjStatus   = document.getElementById('cmj-status');
+      const sleepAlert  = document.getElementById('sleep-alert');
+      const cmjAlert    = document.getElementById('cmj-alert');
+      const globalAlert = document.getElementById('global-alert');
+
+      let hasDanger = false;
+
+      // SOMMEIL
+      if (isNaN(sleepVal)) {
+        sleepStatus.textContent = '—';
+        sleepStatus.className = 'security-status';
+        sleepAlert.classList.remove('active');
+      } else if (sleepVal < 7.5) {
+        sleepStatus.textContent = '⛔ DANGER';
+        sleepStatus.className = 'security-status danger';
+        sleepAlert.classList.add('active');
+        hasDanger = true;
+      } else if (sleepVal < 8) {
+        sleepStatus.textContent = '⚠ LIMITE';
+        sleepStatus.className = 'security-status warn';
+        sleepAlert.classList.remove('active');
+      } else {
+        sleepStatus.textContent = '✓ OPTIMAL';
+        sleepStatus.className = 'security-status ok';
+        sleepAlert.classList.remove('active');
+      }
+
+      // CMJ
+      if (isNaN(cmjVal)) {
+        cmjStatus.textContent = '—';
+        cmjStatus.className = 'security-status';
+        cmjAlert.classList.remove('active');
+      } else if (cmjVal < 38) {
+        cmjStatus.textContent = '⛔ CRITIQUE';
+        cmjStatus.className = 'security-status danger';
+        cmjAlert.classList.add('active');
+        hasDanger = true;
+      } else if (cmjVal < 42) {
+        cmjStatus.textContent = '⚠ ATTENTION';
+        cmjStatus.className = 'security-status warn';
+        cmjAlert.classList.remove('active');
+      } else {
+        cmjStatus.textContent = '✓ PRÊT';
+        cmjStatus.className = 'security-status ok';
+        cmjAlert.classList.remove('active');
+      }
+
+      // Alerte globale
+      if (hasDanger) globalAlert.classList.add('active');
+      else globalAlert.classList.remove('active');
+    }
+
+    document.getElementById('sleep-input').addEventListener('input', updateSecurityStatus);
+    document.getElementById('cmj-input').addEventListener('input', updateSecurityStatus);
+
+    /* ════════════════════════════════════════════════════════════
+       PROGRESSION GLOBALE
+    ════════════════════════════════════════════════════════════ */
+    function countTotalExercises() {
+      let total = 0;
+      let done = 0;
+      for (let w = 1; w <= 11; w++) {
+        const data = PROGRAMME[w];
+        if (!data) continue;
+        for (const jour of data.jours) {
+          for (const phase of jour.phases) {
+            for (const ex of phase.exercices) {
+              total++;
+              if (isExerciseDone(ex.id)) done++;
+            }
+          }
+        }
+      }
+      return { total, done };
+    }
+
+    function updateGlobalProgress() {
+      const { total, done } = countTotalExercises();
+      const pct = total > 0 ? Math.round((done / total) * 100) : 0;
+      // On combine avec le temps écoulé
+      const now = new Date();
+      const totalMs = COMPETITION_DATE - START_DATE;
+      const elapsed = Math.max(0, now - START_DATE);
+      const timePct = Math.min(100, Math.round((elapsed / totalMs) * 100));
+      const combined = Math.round((pct * 0.6) + (timePct * 0.4));
+      document.getElementById('global-pct').textContent = combined + '%';
+      document.getElementById('global-progress-fill').style.width = combined + '%';
+    }
+
+    /* ════════════════════════════════════════════════════════════
+       NAVIGATION BLOCS
+    ════════════════════════════════════════════════════════════ */
+    function setBloc(bloc) {
+      currentBloc = bloc;
+      document.querySelectorAll('.bloc-btn').forEach(b => {
+        b.classList.toggle('active', parseInt(b.dataset.bloc) === bloc);
+      });
+      // Première semaine du bloc
+      const firstWeek = { 1:1, 2:4, 3:8, 4:11 }[bloc] || 1;
+      renderWeekNav(bloc);
+      renderWeek(firstWeek);
+    }
+
+    /* ════════════════════════════════════════════════════════════
+       NAVIGATION SEMAINES
+    ════════════════════════════════════════════════════════════ */
+    function getBlocWeeks(bloc) {
+      return { 1:[1,2,3], 2:[4,5,6,7], 3:[8,9,10], 4:[11] }[bloc] || [];
+    }
+
+    function renderWeekNav(bloc) {
+      const weeks = getBlocWeeks(bloc);
+      const nav = document.getElementById('week-nav');
+      nav.innerHTML = '';
+      weeks.forEach(w => {
+        const data = PROGRAMME[w];
+        if (!data) return;
+        const btn = document.createElement('button');
+        btn.className = 'week-btn' + (w === currentWeek ? ' active' : '');
+        btn.textContent = data.titre;
+        btn.onclick = () => renderWeek(w);
+        nav.appendChild(btn);
+      });
+    }
+
+    /* ════════════════════════════════════════════════════════════
+       RENDU D'UNE SEMAINE
+    ════════════════════════════════════════════════════════════ */
+    function renderWeek(weekNum) {
+      currentWeek = weekNum;
+      const data = PROGRAMME[weekNum];
+      if (!data) return;
+
+      // Update nav active
+      document.querySelectorAll('.week-btn').forEach(b => {
+        b.classList.toggle('active', b.textContent === data.titre);
+      });
+
+      // Week header
+      document.getElementById('wh-title').textContent    = data.titre;
+      document.getElementById('wh-subtitle').textContent = data.dates + ' · ' + data.focus.split('·')[0].trim();
+      document.getElementById('wh-focus').textContent    = 'FOCUS : ' + (data.focus.split('·')[1] || data.focus).trim();
+
+      // Jours
+      const grid = document.getElementById('days-grid');
+      grid.innerHTML = '';
+
+      data.jours.forEach(jour => {
+        if (jour.repos) {
+          // Carte repos
+          const card = document.createElement('div');
+          card.className = 'day-card';
+          card.innerHTML = `
+            <div class="day-header">
+              <div>
+                <div class="day-name" style="color:var(--grey-mid)">${jour.nom}</div>
+                <div class="day-type">${jour.type}</div>
+              </div>
+              <span class="day-tag repos">${jour.tag.toUpperCase()}</span>
+            </div>
+            <div class="day-body repos-card">
+              <div class="repos-icon">🛌</div>
+              <div class="repos-text">${jour.repos_msg}</div>
+              <div class="repos-mandate">${jour.repos_detail}</div>
+            </div>`;
+          grid.appendChild(card);
+          return;
+        }
+
+        const card = document.createElement('div');
+        card.className = 'day-card';
+
+        // Count exercices pour progress bar
+        let exTotal = 0, exDone = 0;
+        jour.phases.forEach(p => {
+          p.exercices.forEach(ex => {
+            exTotal++;
+            if (isExerciseDone(ex.id)) exDone++;
+          });
+        });
+        const dayPct = exTotal > 0 ? Math.round((exDone / exTotal) * 100) : 0;
+
+        const tagColors = {
+          vitesse: 'vitesse', force: 'force', recup: 'recup', repos: 'repos', aw: 'aw', test: 'test'
+        };
+
+        let phasesHTML = '';
+        jour.phases.forEach(phase => {
+          const cls = phase.couleur === 'cyan' ? 'cyan' : (phase.couleur === 'gold' ? 'gold' : '');
+          let exHTML = '';
+          phase.exercices.forEach(ex => {
+            const done = isExerciseDone(ex.id);
+            exHTML += `
+              <div class="exercise-item${done ? ' done' : ''}" data-id="${ex.id}" onclick="toggleExercise(this,'${ex.id}')">
+                <div class="ex-check"></div>
+                <div class="ex-info">
+                  <div class="ex-name">${ex.nom}</div>
+                  <div class="ex-details">
+                    ${ex.series ? `<span class="ex-chip series">${ex.series} série${ex.series!='1'?'s':''}</span>` : ''}
+                    ${ex.reps ? `<span class="ex-chip reps">${ex.reps}</span>` : ''}
+                    ${ex.recup && ex.recup !== '—' ? `<span class="ex-chip recup">récup ${ex.recup}</span>` : ''}
+                  </div>
+                  ${ex.note ? `<div class="ex-note">▸ ${ex.note}</div>` : ''}
+                </div>
+              </div>`;
+          });
+
+          phasesHTML += `
+            <div class="day-phase">
+              <div class="phase-title ${cls}">${phase.titre}</div>
+              ${exHTML}
+            </div>`;
+        });
+
+        card.innerHTML = `
+          <div class="day-header">
+            <div>
+              <div class="day-name">${jour.nom}</div>
+              <div class="day-type">${jour.type}</div>
+            </div>
+            <span class="day-tag ${tagColors[jour.tag] || ''}">${jour.tag.toUpperCase()}</span>
+          </div>
+          <div class="day-body">
+            ${phasesHTML}
+            <div class="day-progress">
+              <div class="day-progress-fill" style="width:${dayPct}%"></div>
+            </div>
+            <div class="day-progress-label">${exDone}/${exTotal} exercices (${dayPct}%)</div>
+          </div>`;
+
+        grid.appendChild(card);
+      });
+
+      // ARM WRESTLING section
+      renderAWSection();
+      updateGlobalProgress();
+    }
+
+    /* ════════════════════════════════════════════════════════════
+       TOGGLE EXERCICE (checkbox)
+    ════════════════════════════════════════════════════════════ */
+    function toggleExercise(el, id) {
+      const isDone = el.classList.contains('done');
+      el.classList.toggle('done', !isDone);
+      saveExercise(id, !isDone);
+
+      // Update day progress
+      const dayBody = el.closest('.day-body');
+      const allEx   = dayBody.querySelectorAll('.exercise-item');
+      const doneEx  = dayBody.querySelectorAll('.exercise-item.done');
+      const pct = allEx.length > 0 ? Math.round((doneEx.length / allEx.length) * 100) : 0;
+      const fill  = dayBody.querySelector('.day-progress-fill');
+      const label = dayBody.querySelector('.day-progress-label');
+      if (fill)  fill.style.width = pct + '%';
+      if (label) label.textContent = `${doneEx.length}/${allEx.length} exercices (${pct}%)`;
+
+      showToast(!isDone ? '✓ Exercice validé' : '↩ Exercice annulé');
+      updateGlobalProgress();
+      updateCharts();
+    }
+
+    /* ════════════════════════════════════════════════════════════
+       SECTION ARM WRESTLING (résumé hebdomadaire)
+    ════════════════════════════════════════════════════════════ */
+    function renderAWSection() {
+      // Affiche un résumé des tips AW pour la semaine
+      const tips = {
+        1: ['Activation tendineuse douce — top-roll introductif', 'Travail isométrie 90° — ancrage combat', 'Endurance grip dead-hang', 'Gainage tronc → transmission force'],
+        2: ['Charge +10% vs S1 — progression contrôlée', 'Wrist roller — endurance spécifique poignet', 'Farmer walk — grip d\'acier fonctionnel', 'Prévention coiffe rotateurs'],
+        3: ['Charge maximale bloc 1 — +15% vs S1', 'Isométrie 10s — pic tension combat', 'Pince de force — endurance grip fin de match', 'Test force maximale top-roll'],
+        4: ['Explosivité ouverture — première impulsion', 'Angles de pression : 70°/90°/110°', 'Traction rotation — profil complet AW', 'Simulation position réelle'],
+        5: ['Simulation combat table (partenaire)', 'Variation prise 2-4 doigts', 'Force axe de combat — trajectoire top-roll', 'Curl pronation lourd — force d\'ouverture'],
+        6: ['Explosivité AW + relâchement', 'Isométrie multi-angles', 'Extension tricep + supination — défense', 'Force dorsale — anchor de combat'],
+        7: ['Test PB top-roll — charge maximale bloc 2', 'Isométrie maximum 10s × 5', 'Simulation combat 3 × 15s — tout donner', 'Peak AW bloc 2'],
+        8: ['Charge réduite 80% — affûtage', 'Maintien connexion nerveuse', 'Étirements profonds avant-bras', 'Tendons en récupération'],
+        9: ['Technique pure automatisme', 'Simulation combat intense', 'Mental d\'assassin — Victoire anticipée', 'No fatigue tendineuse'],
+        10:['Maintien léger × 3 × 5', 'Isométrie courte × 3 × 6s', 'Étirements + massage', 'Prêt à 100% pour la compét'],
+        11:['Routine légère × 2 × 3 (50%)', 'Connexion nerveuse maintenue', 'Repos tendineux prioritaire', 'Compét = expression de la préparation'],
+      };
+
+      const currentTips = tips[currentWeek] || tips[1];
+      const grid = document.getElementById('aw-days-grid');
+      grid.innerHTML = '';
+
+      const card = document.createElement('div');
+      card.className = 'card gold-card';
+      card.innerHTML = `
+        <div class="card-label">ARM WRESTLING — FOCUS SEMAINE ${currentWeek}</div>
+        <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:10px; margin-top:12px;">
+          ${currentTips.map((t,i) => `
+            <div style="padding:10px; background:rgba(255,204,0,0.04); border-radius:6px; border-left:2px solid var(--gold-dim);">
+              <div style="font-family:var(--font-data); font-size:0.55rem; color:var(--gold-dim); letter-spacing:0.15em; margin-bottom:4px;">POINT ${i+1}</div>
+              <div style="font-family:var(--font-aggro); font-size:1rem; color:var(--white-soft); line-height:1.3;">${t}</div>
+            </div>
+          `).join('')}
+        </div>
+        <div style="margin-top:14px; padding:10px; background:rgba(255,26,46,0.05); border-radius:6px; border:1px solid rgba(255,26,46,0.2);">
+          <div style="font-family:var(--font-data); font-size:0.58rem; color:var(--blood); letter-spacing:0.12em;">⛔ RÈGLE ABSOLUE AW</div>
+          <div style="font-family:var(--font-aggro); font-size:1rem; color:var(--white-soft); margin-top:4px;">
+            Arm Wrestling UNIQUEMENT le mardi · Séance courte, intensive, ciblée · Ne jamais voler l'énergie du SNC destinée au sprint
+          </div>
+        </div>`;
+      grid.appendChild(card);
+    }
+
+    /* ════════════════════════════════════════════════════════════
+       GRAPHIQUES CANVAS
+    ════════════════════════════════════════════════════════════ */
+    function drawChronoChart() {
+      const canvas = document.getElementById('chronoChart');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const W = canvas.offsetWidth;
+      const H = 180;
+      canvas.width  = W;
+      canvas.height = H;
+
+      // Données prédictives 11 semaines
+      const chronos = [
+        13.30, 13.18, 13.08, 13.00, 12.92, 12.85, 12.78, 12.72, 12.66, 12.62, 12.58
+      ];
+      const labels = ['S1','S2','S3','S4','S5','S6','S7','S8','S9','S10','S11'];
+      const n = chronos.length;
+
+      const minV = 12.50, maxV = 13.40;
+      const padL = 42, padR = 16, padT = 14, padB = 30;
+
+      const toX = (i) => padL + (i / (n - 1)) * (W - padL - padR);
+      const toY = (v) => padT + ((maxV - v) / (maxV - minV)) * (H - padT - padB);
+
+      // Background
+      ctx.fillStyle = '#0f0202';
+      ctx.fillRect(0, 0, W, H);
+
+      // Grid horizontal
+      ctx.strokeStyle = 'rgba(255,255,255,0.05)';
+      ctx.lineWidth = 1;
+      for (let v = 12.50; v <= 13.40; v += 0.2) {
+        const y = toY(v);
+        ctx.beginPath(); ctx.moveTo(padL, y); ctx.lineTo(W - padR, y); ctx.stroke();
+        ctx.fillStyle = 'rgba(255,255,255,0.3)';
+        ctx.font = '9px Share Tech Mono';
+        ctx.fillText(v.toFixed(1) + 's', 2, y + 3);
+      }
+
+      // Zone cible (12.55-12.65)
+      ctx.fillStyle = 'rgba(0,245,255,0.06)';
+      const y1 = toY(12.65), y2 = toY(12.55);
+      ctx.fillRect(padL, y1, W - padL - padR, y2 - y1);
+      ctx.strokeStyle = 'rgba(0,245,255,0.2)';
+      ctx.lineWidth = 1;
+      ctx.setLineDash([4, 4]);
+      ctx.beginPath(); ctx.moveTo(padL, y2); ctx.lineTo(W - padR, y2); ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.fillStyle = 'rgba(0,245,255,0.5)';
+      ctx.font = '9px Share Tech Mono';
+      ctx.fillText('CIBLE', W - padR - 36, y2 - 4);
+
+      // Courbe prédictive
+      const grad = ctx.createLinearGradient(padL, 0, W - padR, 0);
+      grad.addColorStop(0, '#ff1a2e');
+      grad.addColorStop(0.5, '#ffcc00');
+      grad.addColorStop(1, '#00f5ff');
+      ctx.strokeStyle = grad;
+      ctx.lineWidth = 2.5;
+      ctx.beginPath();
+      chronos.forEach((v, i) => {
+        const x = toX(i), y = toY(v);
+        if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+      });
+      ctx.stroke();
+
+      // Points
+      chronos.forEach((v, i) => {
+        const x = toX(i), y = toY(v);
+        ctx.beginPath();
+        ctx.arc(x, y, 3.5, 0, Math.PI * 2);
+        ctx.fillStyle = i === n - 1 ? '#00f5ff' : (i === 0 ? '#ff1a2e' : '#ffcc00');
+        ctx.fill();
+      });
+
+      // Labels X
+      ctx.fillStyle = 'rgba(255,255,255,0.4)';
+      ctx.font = '9px Orbitron';
+      labels.forEach((l, i) => {
+        const x = toX(i);
+        ctx.fillText(l, x - 8, H - 4);
+      });
+    }
+
+    function drawCompletionChart() {
+      const canvas = document.getElementById('completionChart');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const W = canvas.offsetWidth;
+      const H = 180;
+      canvas.width  = W;
+      canvas.height = H;
+
+      // Calculer la complétion par semaine
+      const completions = [];
+      for (let w = 1; w <= 11; w++) {
+        const data = PROGRAMME[w];
+        if (!data) { completions.push(0); continue; }
+        let total = 0, done = 0;
+        data.jours.forEach(j => j.phases.forEach(p => p.exercices.forEach(ex => {
+          total++;
+          if (isExerciseDone(ex.id)) done++;
+        })));
+        completions.push(total > 0 ? Math.round((done / total) * 100) : 0);
+      }
+
+      const labels = completions.map((_,i) => 'S' + (i+1));
+      const n = completions.length;
+      const padL = 34, padR = 10, padT = 14, padB = 28;
+      const barW = Math.floor((W - padL - padR) / n) - 4;
+
+      ctx.fillStyle = '#0f0202';
+      ctx.fillRect(0, 0, W, H);
+
+      // Grid
+      ctx.strokeStyle = 'rgba(255,255,255,0.05)';
+      ctx.lineWidth = 1;
+      [0,25,50,75,100].forEach(v => {
+        const y = padT + ((100 - v) / 100) * (H - padT - padB);
+        ctx.beginPath(); ctx.moveTo(padL, y); ctx.lineTo(W - padR, y); ctx.stroke();
+        ctx.fillStyle = 'rgba(255,255,255,0.3)';
+        ctx.font = '9px Share Tech Mono';
+        ctx.fillText(v + '%', 0, y + 3);
+      });
+
+      // Barres
+      completions.forEach((v, i) => {
+        const x = padL + i * ((W - padL - padR) / n) + 2;
+        const barH = ((H - padT - padB) * v / 100);
+        const y = padT + (H - padT - padB) - barH;
+        const grad = ctx.createLinearGradient(0, y, 0, y + barH);
+        grad.addColorStop(0, v === 100 ? '#00ff88' : (v > 50 ? '#ffcc00' : '#ff1a2e'));
+        grad.addColorStop(1, 'rgba(0,0,0,0.2)');
+        ctx.fillStyle = grad;
+        ctx.fillRect(x, y, barW, barH);
+        // Label X
+        ctx.fillStyle = 'rgba(255,255,255,0.35)';
+        ctx.font = '8px Orbitron';
+        ctx.fillText(labels[i], x + barW/2 - 6, H - 4);
+      });
+    }
+
+    function updateCharts() {
+      drawChronoChart();
+      drawCompletionChart();
+    }
+
+    /* ════════════════════════════════════════════════════════════
+       TOAST NOTIFICATION
+    ════════════════════════════════════════════════════════════ */
+    let toastTimer = null;
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      toast.textContent = '▸ ' + msg;
+      toast.classList.add('show');
+      if (toastTimer) clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toast.classList.remove('show'), 2200);
+    }
+
+    /* ════════════════════════════════════════════════════════════
+       CANVAS PARTICLES — ARRIÈRE-PLAN FLUIDE
+    ════════════════════════════════════════════════════════════ */
+    (function initParticles() {
+      const canvas = document.getElementById('particleCanvas');
+      const ctx = canvas.getContext('2d');
+      let W, H, particles;
+
+      function resize() {
+        W = canvas.width  = window.innerWidth;
+        H = canvas.height = window.innerHeight;
+      }
+      window.addEventListener('resize', resize);
+      resize();
+
+      const COLORS = ['rgba(255,26,46,', 'rgba(0,245,255,', 'rgba(255,204,0,'];
+
+      class Particle {
+        constructor() { this.reset(); }
+        reset() {
+          this.x  = Math.random() * W;
+          this.y  = Math.random() * H;
+          this.vx = (Math.random() - 0.5) * 0.4;
+          this.vy = (Math.random() - 0.5) * 0.4;
+          this.r  = Math.random() * 1.8 + 0.5;
+          this.a  = Math.random() * 0.25 + 0.05;
+          this.color = COLORS[Math.floor(Math.random() * COLORS.length)];
+          this.life = 0;
+          this.maxLife = 200 + Math.random() * 400;
+        }
+        update() {
+          this.x += this.vx;
+          this.y += this.vy;
+          this.life++;
+          if (this.life > this.maxLife || this.x < 0 || this.x > W || this.y < 0 || this.y > H) {
+            this.reset();
+          }
+        }
+        draw() {
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+          const fade = Math.min(1, Math.min(this.life, this.maxLife - this.life) / 40);
+          ctx.fillStyle = this.color + (this.a * fade) + ')';
+          ctx.fill();
+        }
+      }
+
+      particles = Array.from({ length: 80 }, () => new Particle());
+
+      function frame() {
+        ctx.clearRect(0, 0, W, H);
+        // Connexions légères
+        for (let i = 0; i < particles.length; i++) {
+          for (let j = i + 1; j < particles.length; j++) {
+            const dx = particles[i].x - particles[j].x;
+            const dy = particles[i].y - particles[j].y;
+            const d  = Math.sqrt(dx*dx + dy*dy);
+            if (d < 120) {
+              ctx.beginPath();
+              ctx.moveTo(particles[i].x, particles[i].y);
+              ctx.lineTo(particles[j].x, particles[j].y);
+              ctx.strokeStyle = 'rgba(255,26,46,' + (0.05 * (1 - d/120)) + ')';
+              ctx.lineWidth = 0.5;
+              ctx.stroke();
+            }
+          }
+        }
+        particles.forEach(p => { p.update(); p.draw(); });
+        requestAnimationFrame(frame);
+      }
+      frame();
+    })();
+
+    /* ════════════════════════════════════════════════════════════
+       INITIALISATION
+    ════════════════════════════════════════════════════════════ */
+    function init() {
+      renderWeekNav(1);
+      renderWeek(1);
+      updateSecurityStatus();
+      updateGlobalProgress();
+      setTimeout(updateCharts, 300);
+      window.addEventListener('resize', () => setTimeout(updateCharts, 100));
+    }
+
+    init();
+
+  </script>
 </body>
 </html>
